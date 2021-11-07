@@ -19,6 +19,46 @@
 ]]></content>
   </entry>
   <entry>
+    <title>用Hexo框架搭建自己的个人博客</title>
+    <url>/post/7fb40f62.html</url>
+    <content><![CDATA[<h1 id="Hexo框架的环境配置"><a href="#Hexo框架的环境配置" class="headerlink" title="Hexo框架的环境配置"></a>Hexo框架的环境配置</h1><p>本文是小应人生中第一篇博客，也用来记录小应在搭建自己的个人博客时的具体步骤，由于本人使用的是Windows系统，所以接下来的教程全是在Windows系统上的操作。</p>
+<h2 id="用Github创建仓库"><a href="#用Github创建仓库" class="headerlink" title="用Github创建仓库"></a>用Github创建仓库</h2><p>新建一个username.githun.io的仓库。注意仓库名必须是username.githun.io,其中user是你的用户名。然后你就可以用username.githun.io去绑定你的域名了。当然，你不绑定域名也是可以的，就用默认的 username.github.io 来访问</p>
+<h2 id="下载git-for-Windows"><a href="#下载git-for-Windows" class="headerlink" title="下载git for Windows"></a>下载git for Windows</h2><p>直接从<a href="https://git-scm.com/download/win">git官网</a>下载，安装过程也只需要不停的点下一步就好了。安装成功后，将你的Git与GitHub帐号绑定，鼠标右击打开Git Bash。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;你的GitHub用户名&quot;</span><br><span class="line">git config --global user.email &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
+<p>生成ssh密匙文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
+<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#105;&#x74;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#109;">&#103;&#105;&#x74;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#109;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
+<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>也是进入<a href="https://nodejs.org/en/download/">官网</a>直接下载,注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/f680a3b706eb156d.png"><br>检测npm是否安装成功，在命令行中输入 npm -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/83debf122b282a21.png"><br>到这了，安装Hexo的环境已经全部搭建完成。</p>
+<h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架，这需要直自己在电脑里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。创建好后，进入文件夹中，按住示shift键，右击鼠标点击命令行<br><img data-src="https://pic1.zhimg.com/80/v2-a5450a466c0927c25dff8ad6f1d2046c_720w.jpg"><br>使用npm命令安装Hexo，输入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo cli </span><br></pre></td></tr></table></figure>
+<p>这个安装时间比较长，需要耐心等待.</p>
+<h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><p>安装完成后，初始化我们的博客，输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
+<p>初始化时间也较长，请耐心等待。</p>
+<h2 id="本地观看搭建好的博客"><a href="#本地观看搭建好的博客" class="headerlink" title="本地观看搭建好的博客"></a>本地观看搭建好的博客</h2><p>注意这里都是作用在我们刚刚创建的Blog文件夹中。现在我们要在命令台进入刚刚 init 创建的blog中:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd blog</span><br></pre></td></tr></table></figure>
+<p>然后就可以检测我们的网站雏形了，分别按顺序输入以下三条命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new test_my_site</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>现在，打开浏览器输入地址：<br>localhost:4000<br>可以看到网站雏形了。<br><img data-src="https://img-blog.csdnimg.cn/2021041719181532.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dkdXR4aWFveHU=,size_16,color_FFFFFF,t_70"></p>
+<h1 id="推送网站"><a href="#推送网站" class="headerlink" title="推送网站"></a>推送网站</h1><h2 id="站点配置"><a href="#站点配置" class="headerlink" title="站点配置"></a>站点配置</h2><p>上面只是在本地预览，接下来要做的就是就是推送网站，也就是发布网站，让我们的网站可以被更多的人访问。在设置之前，需要解释一个概念，在blog根目录里的_config.yml文件称为站点配置文件，如下图：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/39b19caf58ce9d3c.png"><br>进入根目录里的themes文件夹，里面也有个_config.yml文件，这个称为主题配置文件，如下图:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/2d9550795d7fd7b2.png"><br>下一步将我们的Hexo与GitHub关联起来，打开站点的配置文件_config.yml.<br>将前面的url修改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url: https://username.github.io</span><br></pre></td></tr></table></figure>
+<p>然后，翻到最后修改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo:  https://github.com/sndgza/username.github.io.git</span><br><span class="line">branch: main</span><br></pre></td></tr></table></figure>
+<p>保存站点配置文件。</p>
+<h2 id="部署文件"><a href="#部署文件" class="headerlink" title="部署文件"></a>部署文件</h2><p>前面对git的操作其实就是给hexo depoly 这个命令做相应的配置，让hexo知道你要把blog部署在哪个位置，很显然，我们部署在我们GitHub的仓库里。最后安装Git部署插件，输入命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>由于git是国外的服务器所以有时快有时慢，可能需要等待或者重新下载。下载完成后我们输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+<p>等待，若是报错为连接不上github则重复操作（可开vpn避免）其他报错则中间有环节出现问题。给出因网站原因导致的报错：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/09fcf54989c2a134.png"><br>部署成功后我们就可以通过访问username.github.io访问我们的个人博客了。</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>建站</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>主题next7.8版本配置(1)</title>
     <url>/post/b6b431eb.html</url>
     <content><![CDATA[<h1 id="下载主题next7-8版本"><a href="#下载主题next7-8版本" class="headerlink" title="下载主题next7.8版本"></a>下载主题next7.8版本</h1><p>进入<a href="https://github.com/theme-next/hexo-theme-next/releases/tag/v7.8.0">GitHub</a>下载，并解压到/blog/themes里。<br><img data-src="https://i.bmp.ovh/imgs/2021/11/3d0decbbbe8a7fe7.png"></p>
@@ -78,48 +118,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
+        <tag>建站</tag>
         <tag>next主题</tag>
-        <tag>建站</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用Hexo框架搭建自己的个人博客</title>
-    <url>/post/7fb40f62.html</url>
-    <content><![CDATA[<h1 id="Hexo框架的环境配置"><a href="#Hexo框架的环境配置" class="headerlink" title="Hexo框架的环境配置"></a>Hexo框架的环境配置</h1><p>本文是小应人生中第一篇博客，也用来记录小应在搭建自己的个人博客时的具体步骤，由于本人使用的是Windows系统，所以接下来的教程全是在Windows系统上的操作。</p>
-<h2 id="用Github创建仓库"><a href="#用Github创建仓库" class="headerlink" title="用Github创建仓库"></a>用Github创建仓库</h2><p>新建一个username.githun.io的仓库。注意仓库名必须是username.githun.io,其中user是你的用户名。然后你就可以用username.githun.io去绑定你的域名了。当然，你不绑定域名也是可以的，就用默认的 username.github.io 来访问</p>
-<h2 id="下载git-for-Windows"><a href="#下载git-for-Windows" class="headerlink" title="下载git for Windows"></a>下载git for Windows</h2><p>直接从<a href="https://git-scm.com/download/win">git官网</a>下载，安装过程也只需要不停的点下一步就好了。安装成功后，将你的Git与GitHub帐号绑定，鼠标右击打开Git Bash。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;你的GitHub用户名&quot;</span><br><span class="line">git config --global user.email &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>生成ssh密匙文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#x69;&#x74;&#x40;&#x67;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#99;&#111;&#109;">&#103;&#x69;&#x74;&#x40;&#x67;&#105;&#116;&#x68;&#117;&#98;&#x2e;&#99;&#111;&#109;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
-<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>也是进入<a href="https://nodejs.org/en/download/">官网</a>直接下载,注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/f680a3b706eb156d.png"><br>检测npm是否安装成功，在命令行中输入 npm -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/83debf122b282a21.png"><br>到这了，安装Hexo的环境已经全部搭建完成。</p>
-<h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架，这需要直自己在电脑里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。创建好后，进入文件夹中，按住示shift键，右击鼠标点击命令行<br><img data-src="https://pic1.zhimg.com/80/v2-a5450a466c0927c25dff8ad6f1d2046c_720w.jpg"><br>使用npm命令安装Hexo，输入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo cli </span><br></pre></td></tr></table></figure>
-<p>这个安装时间比较长，需要耐心等待.</p>
-<h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><p>安装完成后，初始化我们的博客，输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
-<p>初始化时间也较长，请耐心等待。</p>
-<h2 id="本地观看搭建好的博客"><a href="#本地观看搭建好的博客" class="headerlink" title="本地观看搭建好的博客"></a>本地观看搭建好的博客</h2><p>注意这里都是作用在我们刚刚创建的Blog文件夹中。现在我们要在命令台进入刚刚 init 创建的blog中:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd blog</span><br></pre></td></tr></table></figure>
-<p>然后就可以检测我们的网站雏形了，分别按顺序输入以下三条命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new test_my_site</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-<p>现在，打开浏览器输入地址：<br>localhost:4000<br>可以看到网站雏形了。<br><img data-src="https://img-blog.csdnimg.cn/2021041719181532.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dkdXR4aWFveHU=,size_16,color_FFFFFF,t_70"></p>
-<h1 id="推送网站"><a href="#推送网站" class="headerlink" title="推送网站"></a>推送网站</h1><h2 id="站点配置"><a href="#站点配置" class="headerlink" title="站点配置"></a>站点配置</h2><p>上面只是在本地预览，接下来要做的就是就是推送网站，也就是发布网站，让我们的网站可以被更多的人访问。在设置之前，需要解释一个概念，在blog根目录里的_config.yml文件称为站点配置文件，如下图：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/39b19caf58ce9d3c.png"><br>进入根目录里的themes文件夹，里面也有个_config.yml文件，这个称为主题配置文件，如下图:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/2d9550795d7fd7b2.png"><br>下一步将我们的Hexo与GitHub关联起来，打开站点的配置文件_config.yml.<br>将前面的url修改为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url: https://username.github.io</span><br></pre></td></tr></table></figure>
-<p>然后，翻到最后修改为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo:  https://github.com/sndgza/username.github.io.git</span><br><span class="line">branch: main</span><br></pre></td></tr></table></figure>
-<p>保存站点配置文件。</p>
-<h2 id="部署文件"><a href="#部署文件" class="headerlink" title="部署文件"></a>部署文件</h2><p>前面对git的操作其实就是给hexo depoly 这个命令做相应的配置，让hexo知道你要把blog部署在哪个位置，很显然，我们部署在我们GitHub的仓库里。最后安装Git部署插件，输入命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-<p>由于git是国外的服务器所以有时快有时慢，可能需要等待或者重新下载。下载完成后我们输入：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-<p>等待，若是报错为连接不上github则重复操作（可开vpn避免）其他报错则中间有环节出现问题。给出因网站原因导致的报错：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/09fcf54989c2a134.png"><br>部署成功后我们就可以通过访问username.github.io访问我们的个人博客了。</p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>建站</tag>
       </tags>
   </entry>
 </search>
