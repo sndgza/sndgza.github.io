@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CodeforcesRound752B题</title>
+    <url>/post/cc8cc824.html</url>
+    <content><![CDATA[<p>题目：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/d92c966895121581.png"><br>  <span id="more"></span><br>题意：给n个案例，每个案例给两个数x,y。试求一个数字n满足条件 n%x=y%n。<br>1.当x&gt;y，时因为对n无大小要求，构建n=x+y;则有(x+y)%x=y=y%(x+y);<br>2.当x=y时，取n=x;<br>3.当x&lt;y时，有y=integer1<em>x+k1,令n=integer1</em>x+k2;有y%n=k2-k1,n%x=k1;即k1=2k2,因为y%x=k1,可令n=y-(y%x)/2;<br><img data-src="https://img-blog.csdnimg.cn/4d7673b5a42c40738451a6e9b06be276.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAVmlrdG9yaWFl,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>构建性算法</tag>
+        <tag>数论</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>主题next7.8版本配置(2)</title>
     <url>/post/2dbb31cc.html</url>
     <content><![CDATA[<h1 id="设置头像"><a href="#设置头像" class="headerlink" title="设置头像"></a>设置头像</h1><p>在主题配置文件里修改avater</p>
@@ -118,7 +131,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;你的GitHub用户名&quot;</span><br><span class="line">git config --global user.email &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
 <p>生成ssh密匙文件：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#105;&#116;&#64;&#103;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#109;">&#103;&#105;&#116;&#64;&#103;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#109;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
+<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#x67;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#x68;&#x75;&#x62;&#x2e;&#x63;&#111;&#x6d;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
 <h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>也是进入<a href="https://nodejs.org/en/download/">官网</a>直接下载,注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/f680a3b706eb156d.png"><br>检测npm是否安装成功，在命令行中输入 npm -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/83debf122b282a21.png"><br>到这了，安装Hexo的环境已经全部搭建完成。</p>
 <h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架，这需要直自己在电脑里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。创建好后，进入文件夹中，按住示shift键，右击鼠标点击命令行<br><img data-src="https://pic1.zhimg.com/80/v2-a5450a466c0927c25dff8ad6f1d2046c_720w.jpg"><br>使用npm命令安装Hexo，输入</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo cli </span><br></pre></td></tr></table></figure>
