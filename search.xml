@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>linux系统编程学习(一)</title>
+    <url>/post/dee8d7af.html</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>linux-系统编程</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>系统编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shell学习（3）控制语句</title>
+    <url>/post/e71ab820.html</url>
+    <content><![CDATA[<p>declare [+/-] [rxi] [变量名称]申明变量类型<br>+/- “-“可用来指定变量的属性，”+”则是取消变量所设的属性。<br>-f 　 仅显示函数。<br>r 　  将变量设置为只读。<br>x 　  指定的变量会成为环境变量，可供shell以外的程序来使用。<br>i 　  [设置值]可以是数值，字符串或运算式。</p>
+<h2 id="if控制语句"><a href="#if控制语句" class="headerlink" title="if控制语句"></a>if控制语句</h2><p>格式一：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if[ 条件1 ]; then</span><br><span class="line">    执行第一段程序</span><br><span class="line">else</span><br><span class="line">    执行第二段程序</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;!--more--&gt;
+</code></pre>
+<p>格式二：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if[ 条件1 ]; then</span><br><span class="line">    执行第一段程序</span><br><span class="line">elif[ 条件2 ];</span><br><span class="line">    执行第二段程序</span><br><span class="line">else</span><br><span class="line">    执行第三段程序</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h2 id="case控制语句"><a href="#case控制语句" class="headerlink" title="case控制语句"></a>case控制语句</h2><p>格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">case $变量名称 in</span><br><span class="line">“第一个变量内容&quot;)</span><br><span class="line">    程序段一</span><br><span class="line">    ;;</span><br><span class="line">“第二个变量内容”)</span><br><span class="line">    程序段二</span><br><span class="line">    ;;</span><br><span class="line">*)</span><br><span class="line">    其他程序段</span><br><span class="line">    exit 1</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<h2 id="for控制语句"><a href="#for控制语句" class="headerlink" title="for控制语句"></a>for控制语句</h2><p>形式一：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for(( 初始值; 限制值; 执行步阶 ))</span><br><span class="line">do </span><br><span class="line">    程序段</span><br><span class="line">done</span><br><span class="line">#初始值：变量在循环中的起始值</span><br><span class="line">#限制值：当变量在限制值内时，就继续进行循环</span><br><span class="line">#执行步阶：每做一次循环时，变量的变化量</span><br></pre></td></tr></table></figure>
+<p>形式二：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for var in con1 con2 con3 ...</span><br><span class="line">do</span><br><span class="line">    程序段</span><br><span class="line">done</span><br><span class="line">#第一次循环时var的值为con1，第二次循环时var为con2</span><br><span class="line">#以此类推</span><br></pre></td></tr></table></figure>
+<h2 id="while控制语句"><a href="#while控制语句" class="headerlink" title="while控制语句"></a>while控制语句</h2><pre><code>while[ condition ]
+do 
+    程序段
+done
+</code></pre>
+<h2 id="until控制语句"><a href="#until控制语句" class="headerlink" title="until控制语句"></a>until控制语句</h2><pre><code>until [ condition ]
+do
+    程序段
+done
+#当conditio成立时退出循环
+</code></pre>
+<h2 id="break-continue"><a href="#break-continue" class="headerlink" title="break continue"></a>break continue</h2><p>break<br>    break命令允许跳出循环<br>    break通常在进行一些处理后退出循环或case语句<br>continue<br>    contiune命令类似于break<br>    它不会跳出循环只是跳过这个步骤</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>定义函数的两种格式：<br>    格式一：<br>    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">函数名()</span><br><span class="line">&#123;</span><br><span class="line">    命令 ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>    格式二：<br>    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function 函数名()</span><br><span class="line">&#123;</span><br><span class="line">    命令 ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>    必须定义在脚本开始部分<br>函数调用：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">函数名 param1 param2 param3 ...</span><br></pre></td></tr></table></figure>
+<p>使用参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$1 $2 $3 ...</span><br></pre></td></tr></table></figure>
+<p>函数返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">return 返回值</span><br><span class="line">#可通过使用 $? 条用返回值但 $? 最大显示值为255</span><br><span class="line">#可直接调用返回变量</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>linux-shell</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Guess the Permutation</title>
     <url>/post/edb4f79a.html</url>
     <content><![CDATA[<blockquote>
@@ -37,16 +90,16 @@
       </tags>
   </entry>
   <entry>
-    <title>shell学习（一）变量</title>
+    <title>shell学习（1）变量</title>
     <url>/post/24ad253c.html</url>
     <content><![CDATA[<h2 id="shell-脚本的定义与执行"><a href="#shell-脚本的定义与执行" class="headerlink" title="shell 脚本的定义与执行"></a>shell 脚本的定义与执行</h2><p>1、定义开头：   #!/bin/bash<br>               #！用来声明当前脚本文件的shell解释器的类型，如果不写则为默认的shell<br>2、编写代码     单个#表示注释<br>3、执行<br>    chmod +x xxx.sh ./xxx.sh 修改为可执行权限后执行 检测#!，使用#！指定的bash读取解释，没有则使用默认的bash<br>    bash test.sh             直接指定使用bash解释xxx.sh<br>    . test                   使用当前shell读取接收xxx.sh<br>      <span id="more"></span><br><strong>定义变量</strong><br>变量名=变量值<br>#赋值操作时不能在=两边加空格<br>num=10<br><strong>引用变量</strong><br>$变量名<br>如：i=$num<br><strong>显示变量</strong><br>echo $num<br>echo $i<br><strong>清除变量</strong><br>unset num</p>
 <p><strong>变量的其他用法</strong><br>read string<br>    从键盘输入字符串给string<br>readonly var=100<br>    只读变量，以后不能改变不能清除<br>export var=300<br>    使用export说明的变量，会被导出为环境变量，其他shell均可使用</p>
-<h2 id="shell环境变量"><a href="#shell环境变量" class="headerlink" title="shell环境变量"></a>shell环境变量</h2><p>shell在开始执行时就已经定义了一些和系统的工作环境有关的变量，我们在shell中可以直接使用$name引用<br>定义：<br>    一般在~/.bashrc或/etc/profile文件中（系统自动调用的脚本）使用export设置吗，允许用户后来更改<br>        VARNAME=value;export VARNAME<br>    传统上，所有环境变量均为大写<br><strong>显示环境变量</strong><br>        使用env可以查看当前系统的所有环境变量<br><strong>清除环境变量</strong><br>        unset清除环境变量<br><strong>常见环境变量：</strong></p>
+<h2 id="shell环境变量"><a href="#shell环境变量" class="headerlink" title="shell环境变量"></a>shell环境变量</h2><p>shell在开始执行时就已经定义了一些和系统的工作环境有关的变量，我们在shell中可以直接使用$name引用<br>定义：<br>    一般在~/.bashrc或/etc/profile文件中（系统自动调用的脚本）使用export设置，允许用户后来更改<br>        VARNAME=value;export VARNAME<br>    传统上，所有环境变量均为大写<br><strong>显示环境变量</strong><br>        使用env可以查看当前系统的所有环境变量<br><strong>清除环境变量</strong><br>        unset清除环境变量<br><strong>常见环境变量：</strong></p>
 <blockquote>
 <p>HONE：保存注册目录的完全路径名<br>PATH：保存用：分隔的路径名，shell将按PATH变量中给出的顺序搜索这些目录，找到的第一个与名称一致的可执行文件将被执行<br>HOSTNAME：主机名<br>SHELL：默认的shell命令解释器<br>LOGAME：此变量保存登陆名<br>PWD：当前工作目录的绝对路径名<br>….<br>在终端定义的环境变量只是临时的，在配置文件~/.bashrc中添加的环境变量才能保存不变（sourc ~/.bashrc）</p>
 </blockquote>
 <h2 id="预设变量"><a href="#预设变量" class="headerlink" title="预设变量"></a>预设变量</h2><blockquote>
-<p>$#：（超过10需要加{}例如：echo”$10 = ${10}”）<br>$0：当前的进程名<br>$#：参数个数<br>$$：当前进程号<br>$*：传给shell脚本参数的内容<br>$?: 检查上一条命令执行是否正确，如果成功返回0，不成功返回非0。 </p>
+<p>$ ：（超过10需要加{}例如：echo”$10 = ${10}”）<br>$0：当前的进程名<br>$#：参数个数<br>$$：当前进程号<br>$*：传给shell脚本参数的内容<br>$?: 检查上一条命令执行是否正确，如果成功返回0，不成功返回非0。 </p>
 </blockquote>
 <h2 id="脚本变量的特殊用法"><a href="#脚本变量的特殊用法" class="headerlink" title="脚本变量的特殊用法"></a>脚本变量的特殊用法</h2><blockquote>
 <p>“”：包含的变量会被解释<br>‘’：包含的变量会被当做字符串解释<br>``：反引号中的内容作为系统命令，并执行其内容，可以替换输出为一个变量（等价于$()）<br>(命令序列)：由子序列完成，不影响当前shell的值<br>{命令序列}：当前shell执行，影响当前shell的值<br>-e：使用转义字符</p>
@@ -193,7 +246,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;你的GitHub用户名&quot;</span><br><span class="line">git config --global user.email &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
 <p>生成ssh密匙文件：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#109;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
+<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#109;">&#x67;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#x2e;&#x63;&#x6f;&#109;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
 <h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>也是进入<a href="https://nodejs.org/en/download/">官网</a>直接下载,注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/f680a3b706eb156d.png"><br>检测npm是否安装成功，在命令行中输入 npm -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/83debf122b282a21.png"><br>到这了，安装Hexo的环境已经全部搭建完成。</p>
 <h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架，这需要直自己在电脑里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。创建好后，进入文件夹中，按住示shift键，右击鼠标点击命令行<br><img data-src="https://pic1.zhimg.com/80/v2-a5450a466c0927c25dff8ad6f1d2046c_720w.jpg"><br>使用npm命令安装Hexo，输入</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo cli </span><br></pre></td></tr></table></figure>
