@@ -1,79 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Moderate Modular Mode</title>
-    <url>/post/cc8cc824.html</url>
-    <content><![CDATA[<blockquote>
-<p>题目出自<a href="https://codeforces.com/contest/1603/problem/B">codeforce div1 B题</a><br>题目：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/d92c966895121581.png"><br>  <span id="more"></span><br>题意：给n个案例，每个案例给两个数x,y。试求一个数字n满足条件 n%x=y%n。<br>1.当x&gt;y，时因为对n无大小要求，构建n=x+y;则有(x+y)%x=y=y%(x+y);<br>2.当x=y时，取n=x;<br>3.当x&lt;y时，有y=integer1*x+k1,令n=integer1*x+k2;有y%n=k2-k1,n%x=k1;即k1=2k2,因为y%x=k1,可令n=y-(y%x)/2;<br><img data-src="https://img-blog.csdnimg.cn/4d7673b5a42c40738451a6e9b06be276.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAVmlrdG9yaWFl,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>数字构建</category>
-      </categories>
-      <tags>
-        <tag>constructive algorithms</tag>
-        <tag>number theory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Guess the Permutation</title>
-    <url>/post/edb4f79a.html</url>
-    <content><![CDATA[<blockquote>
-<p>题目出自<a href="https://codeforces.com/contest/1589/problem/D">codeforce div2 D题</a><br>题意：交互题，有一个1到n的序列a，电脑对这个序列进行了一次更改：将[i,j-1],[j,k-1]两个区间的数字翻转，你可以询问[l,r]区间有几个逆序对？最多询问40次，要猜出i,j,k<br>因为(1,i)的顺序没有改变，所以进行二分查找，可以很容易查到i，询问[i+1,n],和[i,n]两个区间的逆序对，相减可以得出第一个区间的长度，同理得出第二个区间的长度。<br>如题<br>    <img data-src="https://i.bmp.ovh/imgs/2021/11/ff1149a2202a9b5d.png"><br>    <span id="more"></span></p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &quot;cstdio&quot;</span><br><span class="line">#include &quot;iostream&quot;</span><br><span class="line">#define ll long long</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">ll question(ll l,ll r)</span><br><span class="line">&#123;</span><br><span class="line">    ll ans;</span><br><span class="line">    printf(&quot;? %lld %lld\n\n&quot;,l,r);</span><br><span class="line">    cout.flush();</span><br><span class="line">    scanf(&quot;%lld&quot;,&amp;ans);</span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br><span class="line">ll _find_i(ll l,ll r)</span><br><span class="line">&#123;</span><br><span class="line">    while (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        int mid = (l+r+1)/2;</span><br><span class="line">        if(question(l,mid) == 0) l = mid;</span><br><span class="line">        else r = mid - 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return l;</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int test_case;</span><br><span class="line">    scanf(&quot;%d&quot;,&amp;test_case);</span><br><span class="line">    while (test_case--)</span><br><span class="line">    &#123;</span><br><span class="line">        ll i,j,k,n,t;</span><br><span class="line">        scanf(&quot;%lld&quot;,&amp;n);</span><br><span class="line">        t = question(1, n);</span><br><span class="line">        i = _find_i(1, n);</span><br><span class="line">        j =i + t - question(i + 1,n ) + 1;</span><br><span class="line">        k =j + question(j, n) - question(j+1,n);</span><br><span class="line">        printf(&quot;! %lld %lld %lld\n\n&quot;,i,j,k);</span><br><span class="line">        cout.flush();</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>算法</category>
-        <category>二分</category>
-      </categories>
-      <tags>
-        <tag>binary search</tag>
-        <tag>combinatorics</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/post/16107.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>shell学习（1）变量</title>
-    <url>/post/24ad253c.html</url>
-    <content><![CDATA[<h2 id="shell-脚本的定义与执行"><a href="#shell-脚本的定义与执行" class="headerlink" title="shell 脚本的定义与执行"></a>shell 脚本的定义与执行</h2><p>1、定义开头：   #!/bin/bash<br>               #！用来声明当前脚本文件的shell解释器的类型，如果不写则为默认的shell<br>2、编写代码     单个#表示注释<br>3、执行<br>    chmod +x xxx.sh ./xxx.sh 修改为可执行权限后执行 检测#!，使用#！指定的bash读取解释，没有则使用默认的bash<br>    bash test.sh             直接指定使用bash解释xxx.sh<br>    . test                   使用当前shell读取接收xxx.sh<br>      <span id="more"></span><br><strong>定义变量</strong><br>变量名=变量值<br>#赋值操作时不能在=两边加空格<br>num=10<br><strong>引用变量</strong><br>$变量名<br>如：i=$num<br><strong>显示变量</strong><br>echo $num<br>echo $i<br><strong>清除变量</strong><br>unset num</p>
-<p><strong>变量的其他用法</strong><br>read string<br>    从键盘输入字符串给string<br>readonly var=100<br>    只读变量，以后不能改变不能清除<br>export var=300<br>    使用export说明的变量，会被导出为环境变量，其他shell均可使用</p>
-<h2 id="shell环境变量"><a href="#shell环境变量" class="headerlink" title="shell环境变量"></a>shell环境变量</h2><p>shell在开始执行时就已经定义了一些和系统的工作环境有关的变量，我们在shell中可以直接使用$name引用<br>定义：<br>    一般在~/.bashrc或/etc/profile文件中（系统自动调用的脚本）使用export设置，允许用户后来更改<br>        VARNAME=value;export VARNAME<br>    传统上，所有环境变量均为大写<br><strong>显示环境变量</strong><br>        使用env可以查看当前系统的所有环境变量<br><strong>清除环境变量</strong><br>        unset清除环境变量<br><strong>常见环境变量：</strong></p>
-<blockquote>
-<p>HONE：保存注册目录的完全路径名<br>PATH：保存用：分隔的路径名，shell将按PATH变量中给出的顺序搜索这些目录，找到的第一个与名称一致的可执行文件将被执行<br>HOSTNAME：主机名<br>SHELL：默认的shell命令解释器<br>LOGAME：此变量保存登陆名<br>PWD：当前工作目录的绝对路径名<br>….<br>在终端定义的环境变量只是临时的，在配置文件~/.bashrc中添加的环境变量才能保存不变（sourc ~/.bashrc）</p>
-</blockquote>
-<h2 id="预设变量"><a href="#预设变量" class="headerlink" title="预设变量"></a>预设变量</h2><blockquote>
-<p>$ ：（超过10需要加{}例如：echo”$10 = ${10}”）<br>$0：当前的进程名<br>$#：参数个数<br>$$：当前进程号<br>$*：传给shell脚本参数的内容<br>$?: 检查上一条命令执行是否正确，如果成功返回0，不成功返回非0。 </p>
-</blockquote>
-<h2 id="脚本变量的特殊用法"><a href="#脚本变量的特殊用法" class="headerlink" title="脚本变量的特殊用法"></a>脚本变量的特殊用法</h2><blockquote>
-<p>“”：包含的变量会被解释<br>‘’：包含的变量会被当做字符串解释<br>``：反引号中的内容作为系统命令，并执行其内容，可以替换输出为一个变量（等价于$()）<br>(命令序列)：由子序列完成，不影响当前shell的值<br>{命令序列}：当前shell执行，影响当前shell的值<br>-e：使用转义字符</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>linux-shell</category>
-      </categories>
-      <tags>
-        <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux系统编程学习(二)进程</title>
     <url>/post/de546f7d.html</url>
     <content><![CDATA[<h1 id="进程概述"><a href="#进程概述" class="headerlink" title="进程概述"></a>进程概述</h1><h2 id="进程的定义"><a href="#进程的定义" class="headerlink" title="进程的定义"></a>进程的定义</h2><p><strong>进程和程序的区别：</strong><br>程序：是静态的，存放在磁盘上的可执行文件<br>进程：是动态的，是运行在内存中的程序的执行实例</p>
@@ -123,26 +50,6 @@ int execve(const char *pathname,char *const argv[],char *const envp[]);
       <tags>
         <tag>Linux</tag>
         <tag>Linux-进程的创建</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>shell学习（2）条件测试语句</title>
-    <url>/post/e709f898.html</url>
-    <content><![CDATA[<p>在写shell脚本时，经常遇到的问题就是判断字符串是否相等，可能还要检查文件状态或进行数字测试，只有这些测试完成才能做下一步动作。<br>test命令:用于测试字符串、文件状态和数字<br>        test condition 或 [ condition ]<br>        使用中扩号要在条件两边加上空格<br>shell脚本中的条件测试如下：<br>        文件测试、字符串测试、数字测试、符合测试</p>
-<h2 id="文件测试"><a href="#文件测试" class="headerlink" title="文件测试"></a>文件测试</h2><p>测试文件状态的条件表达式<br>1)按文件类型<br>    -e 文件名       文件是否存在<br>    -s 文件名       是否为非空<br>    -b 文件名       块设备文件<br>    -c 文件名       字符设备文件<br>    -d 文件名       目录文件<br>    -f 文件名       普通文件<br>    <span id="more"></span><br>    -L 文件名       软链接文件<br>    -S 文件名       套接字文件<br>    -p 文件名       管道文件<br>1)按文件权限<br>    -r 文件名       可读<br>    -w 文件名       可写<br>    -x 文件名       可执行<br>3)两个文件之间的比较<br>    文件1 -nt 文件2     文件1的修改时间<br>    文件1 -ot 文件2     文件1的修改时间是否比文件2旧<br>    文件1 -ef 文件2     两个文件的inode节点是否一样，用于判断是否是硬链接</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;please input filename&gt;&gt;&quot;</span><br><span class="line">read FILE</span><br><span class="line">test -s $FILE</span><br><span class="line">echo &quot;非空？$?&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="字符串测试"><a href="#字符串测试" class="headerlink" title="字符串测试"></a>字符串测试</h2><p>字符串测试<br>    s1  = s2           两个字符的内容是否完全一样<br>    s1 != s2           两个字符串的内容是否有差异<br>    -z s1              测试s1字符串的长度是否为0<br>    -n s1              测试s1字符串的长度是否不为0</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">test &quot;hello&quot; = &quot;dddddddd&quot;</span><br><span class="line">echo &quot;相等？$?&quot;</span><br><span class="line">test &quot;hello&quot; ！= &quot;dddddddd&quot;</span><br><span class="line">echo &quot;不相等？$?&quot;</span><br><span class="line">test -z &quot;hello&quot;</span><br><span class="line">echo  &quot;长度为0？$?&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="数字测试"><a href="#数字测试" class="headerlink" title="数字测试"></a>数字测试</h2><p>数字测试<br>a -eq b                是否等于<br>a -ne b                是否不等于<br>a -gt b                是否大于<br>a -ge b                是否大于等于<br>a -lt b                是否小于<br>a -le b                是否小于等于</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;please input tow number&gt;&gt;&quot;</span><br><span class="line">read a b</span><br><span class="line">test a -eq b</span><br><span class="line">echo &quot;是否等于？$?&quot;</span><br><span class="line">test a -ne b </span><br><span class="line">echo &quot;不相等？$?&quot;</span><br><span class="line">test a -gt b &quot;</span><br><span class="line">echo  &quot;是否大于$?&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="复合测试"><a href="#复合测试" class="headerlink" title="复合测试"></a>复合测试</h2><p>命令执行控制：<br>    &amp;&amp;：<br>        command1&amp;&amp;command2<br>    ||:<br>        command1&amp;&amp;command2<br>多重条件判定：<br>-a  两状况同时成立<br>    test -r file -a -x file<br>    file文件同时拥有读写权限返回true<br>-o  两状况任何一个成立<br>    test -r file -o -x file<br>    file文件拥有读或写权限返回true<br>!  相反状态<br>    test ！-x file<br>    file文件不具有可执行权限时返回true</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">num=100</span><br><span class="line">#test $num -ge 0 &amp;&amp; test $num -lt 101</span><br><span class="line">test $num -ge 0 -a $num  -lt 101</span><br><span class="line">#判断num是否大于0小于101</span><br><span class="line">echo &quot;$?&quot; </span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>linux-shell</category>
-      </categories>
-      <tags>
-        <tag>shell</tag>
       </tags>
   </entry>
   <entry>
@@ -203,6 +110,126 @@ done
       </categories>
       <tags>
         <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Guess the Permutation</title>
+    <url>/post/edb4f79a.html</url>
+    <content><![CDATA[<blockquote>
+<p>题目出自<a href="https://codeforces.com/contest/1589/problem/D">codeforce div2 D题</a><br>题意：交互题，有一个1到n的序列a，电脑对这个序列进行了一次更改：将[i,j-1],[j,k-1]两个区间的数字翻转，你可以询问[l,r]区间有几个逆序对？最多询问40次，要猜出i,j,k<br>因为(1,i)的顺序没有改变，所以进行二分查找，可以很容易查到i，询问[i+1,n],和[i,n]两个区间的逆序对，相减可以得出第一个区间的长度，同理得出第二个区间的长度。<br>如题<br>    <img data-src="https://i.bmp.ovh/imgs/2021/11/ff1149a2202a9b5d.png"><br>    <span id="more"></span></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &quot;cstdio&quot;</span><br><span class="line">#include &quot;iostream&quot;</span><br><span class="line">#define ll long long</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">ll question(ll l,ll r)</span><br><span class="line">&#123;</span><br><span class="line">    ll ans;</span><br><span class="line">    printf(&quot;? %lld %lld\n\n&quot;,l,r);</span><br><span class="line">    cout.flush();</span><br><span class="line">    scanf(&quot;%lld&quot;,&amp;ans);</span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br><span class="line">ll _find_i(ll l,ll r)</span><br><span class="line">&#123;</span><br><span class="line">    while (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        int mid = (l+r+1)/2;</span><br><span class="line">        if(question(l,mid) == 0) l = mid;</span><br><span class="line">        else r = mid - 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return l;</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int test_case;</span><br><span class="line">    scanf(&quot;%d&quot;,&amp;test_case);</span><br><span class="line">    while (test_case--)</span><br><span class="line">    &#123;</span><br><span class="line">        ll i,j,k,n,t;</span><br><span class="line">        scanf(&quot;%lld&quot;,&amp;n);</span><br><span class="line">        t = question(1, n);</span><br><span class="line">        i = _find_i(1, n);</span><br><span class="line">        j =i + t - question(i + 1,n ) + 1;</span><br><span class="line">        k =j + question(j, n) - question(j+1,n);</span><br><span class="line">        printf(&quot;! %lld %lld %lld\n\n&quot;,i,j,k);</span><br><span class="line">        cout.flush();</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+        <category>二分</category>
+      </categories>
+      <tags>
+        <tag>binary search</tag>
+        <tag>combinatorics</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shell学习（2）条件测试语句</title>
+    <url>/post/e709f898.html</url>
+    <content><![CDATA[<p>在写shell脚本时，经常遇到的问题就是判断字符串是否相等，可能还要检查文件状态或进行数字测试，只有这些测试完成才能做下一步动作。<br>test命令:用于测试字符串、文件状态和数字<br>        test condition 或 [ condition ]<br>        使用中扩号要在条件两边加上空格<br>shell脚本中的条件测试如下：<br>        文件测试、字符串测试、数字测试、符合测试</p>
+<h2 id="文件测试"><a href="#文件测试" class="headerlink" title="文件测试"></a>文件测试</h2><p>测试文件状态的条件表达式<br>1)按文件类型<br>    -e 文件名       文件是否存在<br>    -s 文件名       是否为非空<br>    -b 文件名       块设备文件<br>    -c 文件名       字符设备文件<br>    -d 文件名       目录文件<br>    -f 文件名       普通文件<br>    <span id="more"></span><br>    -L 文件名       软链接文件<br>    -S 文件名       套接字文件<br>    -p 文件名       管道文件<br>1)按文件权限<br>    -r 文件名       可读<br>    -w 文件名       可写<br>    -x 文件名       可执行<br>3)两个文件之间的比较<br>    文件1 -nt 文件2     文件1的修改时间<br>    文件1 -ot 文件2     文件1的修改时间是否比文件2旧<br>    文件1 -ef 文件2     两个文件的inode节点是否一样，用于判断是否是硬链接</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;please input filename&gt;&gt;&quot;</span><br><span class="line">read FILE</span><br><span class="line">test -s $FILE</span><br><span class="line">echo &quot;非空？$?&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串测试"><a href="#字符串测试" class="headerlink" title="字符串测试"></a>字符串测试</h2><p>字符串测试<br>    s1  = s2           两个字符的内容是否完全一样<br>    s1 != s2           两个字符串的内容是否有差异<br>    -z s1              测试s1字符串的长度是否为0<br>    -n s1              测试s1字符串的长度是否不为0</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">test &quot;hello&quot; = &quot;dddddddd&quot;</span><br><span class="line">echo &quot;相等？$?&quot;</span><br><span class="line">test &quot;hello&quot; ！= &quot;dddddddd&quot;</span><br><span class="line">echo &quot;不相等？$?&quot;</span><br><span class="line">test -z &quot;hello&quot;</span><br><span class="line">echo  &quot;长度为0？$?&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="数字测试"><a href="#数字测试" class="headerlink" title="数字测试"></a>数字测试</h2><p>数字测试<br>a -eq b                是否等于<br>a -ne b                是否不等于<br>a -gt b                是否大于<br>a -ge b                是否大于等于<br>a -lt b                是否小于<br>a -le b                是否小于等于</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">echo &quot;please input tow number&gt;&gt;&quot;</span><br><span class="line">read a b</span><br><span class="line">test a -eq b</span><br><span class="line">echo &quot;是否等于？$?&quot;</span><br><span class="line">test a -ne b </span><br><span class="line">echo &quot;不相等？$?&quot;</span><br><span class="line">test a -gt b &quot;</span><br><span class="line">echo  &quot;是否大于$?&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="复合测试"><a href="#复合测试" class="headerlink" title="复合测试"></a>复合测试</h2><p>命令执行控制：<br>    &amp;&amp;：<br>        command1&amp;&amp;command2<br>    ||:<br>        command1&amp;&amp;command2<br>多重条件判定：<br>-a  两状况同时成立<br>    test -r file -a -x file<br>    file文件同时拥有读写权限返回true<br>-o  两状况任何一个成立<br>    test -r file -o -x file<br>    file文件拥有读或写权限返回true<br>!  相反状态<br>    test ！-x file<br>    file文件不具有可执行权限时返回true</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">num=100</span><br><span class="line">#test $num -ge 0 &amp;&amp; test $num -lt 101</span><br><span class="line">test $num -ge 0 -a $num  -lt 101</span><br><span class="line">#判断num是否大于0小于101</span><br><span class="line">echo &quot;$?&quot; </span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux-shell</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shell学习（1）变量</title>
+    <url>/post/24ad253c.html</url>
+    <content><![CDATA[<h2 id="shell-脚本的定义与执行"><a href="#shell-脚本的定义与执行" class="headerlink" title="shell 脚本的定义与执行"></a>shell 脚本的定义与执行</h2><p>1、定义开头：   #!/bin/bash<br>               #！用来声明当前脚本文件的shell解释器的类型，如果不写则为默认的shell<br>2、编写代码     单个#表示注释<br>3、执行<br>    chmod +x xxx.sh ./xxx.sh 修改为可执行权限后执行 检测#!，使用#！指定的bash读取解释，没有则使用默认的bash<br>    bash test.sh             直接指定使用bash解释xxx.sh<br>    . test                   使用当前shell读取接收xxx.sh<br>      <span id="more"></span><br><strong>定义变量</strong><br>变量名=变量值<br>#赋值操作时不能在=两边加空格<br>num=10<br><strong>引用变量</strong><br>$变量名<br>如：i=$num<br><strong>显示变量</strong><br>echo $num<br>echo $i<br><strong>清除变量</strong><br>unset num</p>
+<p><strong>变量的其他用法</strong><br>read string<br>    从键盘输入字符串给string<br>readonly var=100<br>    只读变量，以后不能改变不能清除<br>export var=300<br>    使用export说明的变量，会被导出为环境变量，其他shell均可使用</p>
+<h2 id="shell环境变量"><a href="#shell环境变量" class="headerlink" title="shell环境变量"></a>shell环境变量</h2><p>shell在开始执行时就已经定义了一些和系统的工作环境有关的变量，我们在shell中可以直接使用$name引用<br>定义：<br>    一般在~/.bashrc或/etc/profile文件中（系统自动调用的脚本）使用export设置，允许用户后来更改<br>        VARNAME=value;export VARNAME<br>    传统上，所有环境变量均为大写<br><strong>显示环境变量</strong><br>        使用env可以查看当前系统的所有环境变量<br><strong>清除环境变量</strong><br>        unset清除环境变量<br><strong>常见环境变量：</strong></p>
+<blockquote>
+<p>HONE：保存注册目录的完全路径名<br>PATH：保存用：分隔的路径名，shell将按PATH变量中给出的顺序搜索这些目录，找到的第一个与名称一致的可执行文件将被执行<br>HOSTNAME：主机名<br>SHELL：默认的shell命令解释器<br>LOGAME：此变量保存登陆名<br>PWD：当前工作目录的绝对路径名<br>….<br>在终端定义的环境变量只是临时的，在配置文件~/.bashrc中添加的环境变量才能保存不变（sourc ~/.bashrc）</p>
+</blockquote>
+<h2 id="预设变量"><a href="#预设变量" class="headerlink" title="预设变量"></a>预设变量</h2><blockquote>
+<p>$ ：（超过10需要加{}例如：echo”$10 = ${10}”）<br>$0：当前的进程名<br>$#：参数个数<br>$$：当前进程号<br>$*：传给shell脚本参数的内容<br>$?: 检查上一条命令执行是否正确，如果成功返回0，不成功返回非0。 </p>
+</blockquote>
+<h2 id="脚本变量的特殊用法"><a href="#脚本变量的特殊用法" class="headerlink" title="脚本变量的特殊用法"></a>脚本变量的特殊用法</h2><blockquote>
+<p>“”：包含的变量会被解释<br>‘’：包含的变量会被当做字符串解释<br>``：反引号中的内容作为系统命令，并执行其内容，可以替换输出为一个变量（等价于$()）<br>(命令序列)：由子序列完成，不影响当前shell的值<br>{命令序列}：当前shell执行，影响当前shell的值<br>-e：使用转义字符</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>linux-shell</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Moderate Modular Mode</title>
+    <url>/post/cc8cc824.html</url>
+    <content><![CDATA[<blockquote>
+<p>题目出自<a href="https://codeforces.com/contest/1603/problem/B">codeforce div1 B题</a><br>题目：<br><img data-src="https://i.bmp.ovh/imgs/2021/11/d92c966895121581.png"><br>  <span id="more"></span><br>题意：给n个案例，每个案例给两个数x,y。试求一个数字n满足条件 n%x=y%n。<br>1.当x&gt;y，时因为对n无大小要求，构建n=x+y;则有(x+y)%x=y=y%(x+y);<br>2.当x=y时，取n=x;<br>3.当x&lt;y时，有y=integer1*x+k1,令n=integer1*x+k2;有y%n=k2-k1,n%x=k1;即k1=2k2,因为y%x=k1,可令n=y-(y%x)/2;<br><img data-src="https://img-blog.csdnimg.cn/4d7673b5a42c40738451a6e9b06be276.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAVmlrdG9yaWFl,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>数字构建</category>
+      </categories>
+      <tags>
+        <tag>constructive algorithms</tag>
+        <tag>number theory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>主题next7.8版本配置(2)</title>
+    <url>/post/2dbb31cc.html</url>
+    <content><![CDATA[<h1 id="设置头像"><a href="#设置头像" class="headerlink" title="设置头像"></a>设置头像</h1><p>在主题配置文件里修改avater</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">avatar:</span><br><span class="line">  # Replace the default image and set the url here.</span><br><span class="line">  url: /images/QQ图片20211106165309.jpg</span><br><span class="line">  # If true, the avatar will be dispalyed in circle.</span><br><span class="line">  rounded: true</span><br><span class="line">  # If true, the avatar will be rotated with the cursor.</span><br><span class="line">  rotated: true</span><br></pre></td></tr></table></figure>
+<h1 id="网站底部加上访问量"><a href="#网站底部加上访问量" class="headerlink" title="网站底部加上访问量"></a>网站底部加上访问量</h1><p>修改主题配置文件，找到不蒜子启用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br><span class="line">  total_visitors: true</span><br><span class="line">  total_visitors_icon: user</span><br><span class="line">  total_views: true</span><br><span class="line">  total_views_icon: eye</span><br><span class="line">  post_views: false</span><br><span class="line">  post_views_icon: eye</span><br></pre></td></tr></table></figure>
+<p>修改不蒜子颜色<br>在next/source/_data/styles.styl中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 修改不蒜子数据颜色</span><br><span class="line">#busuanzi_value_site_pv,#busuanzi_value_site_uv&#123;</span><br><span class="line">  color: #00BFFF;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="添加自定义404页面"><a href="#添加自定义404页面" class="headerlink" title="添加自定义404页面"></a>添加自定义404页面</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new page 404</span><br></pre></td></tr></table></figure>
+<p>编辑新建的页面文件，默认在站点根目录下 /source/404/index.md，在 front-matter 中添加 permalink: /404，表示指定该页面固定链接为 http://“主页”/404.html。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title: 404</span><br><span class="line">comments: false</span><br><span class="line">permalink: /404</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">&lt;center&gt;404 Not Found</span><br><span class="line">对不起，您所访问的页面不存在或者已删除</span><br><span class="line">[点击此处](https://sndgza.github.io/)返回首页</span><br><span class="line">&lt;/center&gt;</span><br><span class="line"> * 我的Github：[https://sndgza.github.io/](https://sndgza.github.io/)</span><br></pre></td></tr></table></figure>
+<h1 id="添加图片放大预览功能"><a href="#添加图片放大预览功能" class="headerlink" title="添加图片放大预览功能"></a>添加图片放大预览功能</h1><p>修改主题配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fancybox: true</span><br></pre></td></tr></table></figure>
+<h1 id="图片懒加载设置"><a href="#图片懒加载设置" class="headerlink" title="图片懒加载设置"></a>图片懒加载设置</h1><p>在主题配置文件中启用lazyload</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lazyload: true</span><br></pre></td></tr></table></figure>
+<h1 id="鼠标点击效果"><a href="#鼠标点击效果" class="headerlink" title="鼠标点击效果"></a>鼠标点击效果</h1><p>鼠标点击出现桃心+社会主义核心价值观，在next/source/js/下新建文件clickeffects.js，添加如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">!function (e, t, a) &#123;</span><br><span class="line">    function r() &#123;</span><br><span class="line">      for (var e = 0; e &lt; s.length; e++) s[e].alpha &lt;= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = &quot;left:&quot; + s[e].x + &quot;px;top:&quot; + s[e].y + &quot;px;opacity:&quot; + s[e].alpha + &quot;;transform:scale(&quot; + s[e].scale + &quot;,&quot; + s[e].scale + &quot;) rotate(45deg);background:&quot; + s[e].color + &quot;;z-index:99999&quot;);</span><br><span class="line">      requestAnimationFrame(r)</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function n() &#123;</span><br><span class="line">      var t = &quot;function&quot; == typeof e.onclick &amp;&amp; e.onclick;</span><br><span class="line">      e.onclick = function (e) &#123;</span><br><span class="line">        t &amp;&amp; t(), o(e)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function o(e) &#123;</span><br><span class="line">      var a = t.createElement(&quot;div&quot;);</span><br><span class="line">      a.className = &quot;heart&quot;, s.push(&#123;</span><br><span class="line">        el: a,</span><br><span class="line">        x: e.clientX - 10,</span><br><span class="line">        y: e.clientY - 5,</span><br><span class="line">        scale: 1,</span><br><span class="line">        alpha: 1,</span><br><span class="line">        color: c()</span><br><span class="line">      &#125;), t.body.appendChild(a)</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function i(e) &#123;</span><br><span class="line">      var a = t.createElement(&quot;style&quot;);</span><br><span class="line">      a.type = &quot;text/css&quot;;</span><br><span class="line">      try &#123;</span><br><span class="line">        a.appendChild(t.createTextNode(e))</span><br><span class="line">      &#125; catch (t) &#123;</span><br><span class="line">        a.styleSheet.cssText = e</span><br><span class="line">      &#125;</span><br><span class="line">      t.getElementsByTagName(&quot;head&quot;)[0].appendChild(a)</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function c() &#123;</span><br><span class="line">      return &quot;rgb(&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;)&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    var s = [];</span><br><span class="line">    e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) &#123;</span><br><span class="line">      setTimeout(e, 1e3 / 60)</span><br><span class="line">    &#125;, i(&quot;.heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: &#x27;&#x27;;width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;&quot;), n(), r()</span><br><span class="line">  &#125;(window, document);</span><br><span class="line">  </span><br><span class="line">  /* 社会主体核心价值观效果 */</span><br><span class="line">  var a_idx = 0;</span><br><span class="line">  jQuery(document).ready(function ($) &#123;</span><br><span class="line">    $(&quot;body&quot;).click(function (e) &#123;</span><br><span class="line">      var a = new Array(&quot;富强&quot;, &quot;民主&quot;, &quot;文明&quot;, &quot;和谐&quot;, &quot;自由&quot;, &quot;平等&quot;, &quot;公正&quot;, &quot;法治&quot;, &quot;爱国&quot;, &quot;敬业&quot;, &quot;诚信&quot;, &quot;友善&quot;);</span><br><span class="line">      var $i = $(&quot;&lt;span/&gt;&quot;).text(a[a_idx]);</span><br><span class="line">      a_idx = (a_idx + 1) % a.length;</span><br><span class="line">      var x = e.pageX,</span><br><span class="line">        y = e.pageY;</span><br><span class="line">      $i.css(&#123;</span><br><span class="line">        &quot;z-index&quot;: 100000000,</span><br><span class="line">        &quot;top&quot;: y - 20,</span><br><span class="line">        &quot;left&quot;: x,</span><br><span class="line">        &quot;position&quot;: &quot;absolute&quot;,</span><br><span class="line">        &quot;font-weight&quot;: &quot;bold&quot;,</span><br><span class="line">        &quot;color&quot;: &quot;#ff6651&quot;</span><br><span class="line">      &#125;);</span><br><span class="line">      $(&quot;body&quot;).append($i);</span><br><span class="line">      $i.animate(&#123;</span><br><span class="line">        &quot;top&quot;: y - 180,</span><br><span class="line">        &quot;opacity&quot;: 0</span><br><span class="line">      &#125;, 1500, function () &#123;</span><br><span class="line">        $i.remove();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>修改next/layout/_layout.swig文件，在文件底部 /body&gt; 之前添加代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- 页面点击效果 --&gt;</span><br><span class="line">  &lt;script type=&quot;text/javascript&quot; src=&quot;/js/clickeffects.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="主页文章置顶"><a href="#主页文章置顶" class="headerlink" title="主页文章置顶"></a>主页文章置顶</h1><p>安装插件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ npm uninstall hexo-generator-index --save</span><br><span class="line">$ npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
+<p>然后在需要的文章的Front-matter中加上top: true即可。比如下面这篇文章：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 主题next7.8版本配置(2)</span><br><span class="line">abbrlink: 2dbb31cc</span><br><span class="line">date: 2021-11-08 19:40:36</span><br><span class="line">top: true</span><br><span class="line">tags:</span><br><span class="line">    - next主题</span><br><span class="line">    - 建站</span><br><span class="line">categories:</span><br><span class="line">    - Hexo</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>设置置顶标志<br>打开：/blog/themes/next/layout/_macro 目录下的post.swig文件，定位到<div class="post-meta">标签下，插入如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">    &lt;i class=&quot;fa fa-thumb-tack&quot;&gt;&lt;/i&gt;</span><br><span class="line">    &lt;font color=7D26CD&gt;置顶&lt;/font&gt;</span><br><span class="line">    &lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="设置代码块复制和代码高亮"><a href="#设置代码块复制和代码高亮" class="headerlink" title="设置代码块复制和代码高亮"></a>设置代码块复制和代码高亮</h1><p>在主题配置文件中修改codeblock</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">codeblock:</span><br><span class="line">  # Code Highlight theme</span><br><span class="line">  # Available values: normal | night | night eighties | night blue | night bright | solarized | solarized dark | galactic</span><br><span class="line">  # See: https://github.com/chriskempson/tomorrow-theme</span><br><span class="line">  highlight_theme: night eighties</span><br><span class="line">  # Add copy button on codeblock</span><br><span class="line">  copy_button:</span><br><span class="line">    enable: true</span><br><span class="line">    # Show text copy result.</span><br><span class="line">    show_result: true</span><br><span class="line">    # Available values: default | flat | mac</span><br><span class="line">    style:</span><br></pre></td></tr></table></figure>
+<h1 id="修改分类页面样式"><a href="#修改分类页面样式" class="headerlink" title="修改分类页面样式"></a>修改分类页面样式</h1><p>在主站source/_data/styles.styl中添加内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 分类&amp;&amp;标签 页面样式</span><br><span class="line">.post-block.page &#123;</span><br><span class="line">    margin-top: 40px;</span><br><span class="line">&#125;</span><br><span class="line">// 分类页面page</span><br><span class="line">.category-all-page &#123;</span><br><span class="line">    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);</span><br><span class="line">    background-color: #797D7F;</span><br><span class="line">    padding: 20px 30px 60px 30px;</span><br><span class="line">    border-radius: 25px 25px 25px 25px;</span><br><span class="line">&#125;</span><br><span class="line">.category-all-title &#123;</span><br><span class="line">    font-family: Impact;</span><br><span class="line">    font-size: 24px;</span><br><span class="line">    color: aqua;</span><br><span class="line">&#125;</span><br><span class="line">.category-list &#123;</span><br><span class="line">    overflow: auto;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li &#123;</span><br><span class="line">    height: 100%;</span><br><span class="line">    float: left;</span><br><span class="line">    border-right: 3px solid #222;</span><br><span class="line">    padding: 0 20px;</span><br><span class="line">&#125;</span><br><span class="line">.category-all ul li &#123;</span><br><span class="line">    list-style: none!important;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li:last-child &#123;</span><br><span class="line">    border-right: none;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li a &#123;</span><br><span class="line">    font-size: 16px;</span><br><span class="line">    text-decoration: none;</span><br><span class="line">    color: chartreuse;</span><br><span class="line">    font-family: Helvetica, Verdana, sans-serif;</span><br><span class="line">    // text-transform: uppercase;</span><br><span class="line">    -webkit-transition: all 0.5s ease;</span><br><span class="line">    -moz-transition: all 0.5s ease;</span><br><span class="line">    -o-transition: all 0.5s ease;</span><br><span class="line">    -ms-transition: all 0.5s ease;</span><br><span class="line">    transition: all 0.5s ease;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li a:hover &#123;</span><br><span class="line">    color: black;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li.active a &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">    color: black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="在文章底部添加版权信息"><a href="#在文章底部添加版权信息" class="headerlink" title="在文章底部添加版权信息"></a>在文章底部添加版权信息</h1><p>编辑主题配置文件，修改如下配置:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">creative_commons:</span><br><span class="line">  license: by-nc-sa</span><br><span class="line">  sidebar: true</span><br><span class="line">  post: true</span><br><span class="line">  language:</span><br></pre></td></tr></table></figure>
+<h1 id="添加分享功能"><a href="#添加分享功能" class="headerlink" title="添加分享功能"></a>添加分享功能</h1><p>安装插件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install theme-next/hexo-next-share</span><br></pre></td></tr></table></figure>
+<p>在主题配置文件底部添加</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># NeedMoreShare2</span><br><span class="line"># Dependencies: https://github.com/theme-next/theme-next-needmoreshare2</span><br><span class="line"># For more information: https://github.com/revir/need-more-share2</span><br><span class="line"># iconStyle: default | box</span><br><span class="line"># boxForm: horizontal | vertical</span><br><span class="line"># position: top / middle / bottom + Left / Center / Right</span><br><span class="line"># networks:</span><br><span class="line"># Weibo | Wechat | Douban | QQZone | Twitter | Facebook | Linkedin | Mailto | Reddit | Delicious | StumbleUpon | Pinterest</span><br><span class="line"># GooglePlus | Tumblr | GoogleBookmarks | Newsvine | Evernote | Friendfeed | Vkontakte | Odnoklassniki | Mailru</span><br><span class="line">needmoreshare:</span><br><span class="line">  enable: true</span><br><span class="line">  cdn:</span><br><span class="line">    js: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js</span><br><span class="line">    css: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css</span><br><span class="line">  postbottom:</span><br><span class="line">    enable: true</span><br><span class="line">    options:</span><br><span class="line">      iconStyle: box</span><br><span class="line">      boxForm: horizontal</span><br><span class="line">      position: bottomCenter</span><br><span class="line">      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook</span><br><span class="line">  float:</span><br><span class="line">    enable: false</span><br><span class="line">    options:</span><br><span class="line">      iconStyle: box</span><br><span class="line">      boxForm: horizontal</span><br><span class="line">      position: middleRight</span><br><span class="line">      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>next主题</tag>
+        <tag>建站</tag>
       </tags>
   </entry>
   <entry>
@@ -270,51 +297,6 @@ done
       </tags>
   </entry>
   <entry>
-    <title>主题next7.8版本配置(2)</title>
-    <url>/post/2dbb31cc.html</url>
-    <content><![CDATA[<h1 id="设置头像"><a href="#设置头像" class="headerlink" title="设置头像"></a>设置头像</h1><p>在主题配置文件里修改avater</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">avatar:</span><br><span class="line">  # Replace the default image and set the url here.</span><br><span class="line">  url: /images/QQ图片20211106165309.jpg</span><br><span class="line">  # If true, the avatar will be dispalyed in circle.</span><br><span class="line">  rounded: true</span><br><span class="line">  # If true, the avatar will be rotated with the cursor.</span><br><span class="line">  rotated: true</span><br></pre></td></tr></table></figure>
-<h1 id="网站底部加上访问量"><a href="#网站底部加上访问量" class="headerlink" title="网站底部加上访问量"></a>网站底部加上访问量</h1><p>修改主题配置文件，找到不蒜子启用</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br><span class="line">  total_visitors: true</span><br><span class="line">  total_visitors_icon: user</span><br><span class="line">  total_views: true</span><br><span class="line">  total_views_icon: eye</span><br><span class="line">  post_views: false</span><br><span class="line">  post_views_icon: eye</span><br></pre></td></tr></table></figure>
-<p>修改不蒜子颜色<br>在next/source/_data/styles.styl中添加</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 修改不蒜子数据颜色</span><br><span class="line">#busuanzi_value_site_pv,#busuanzi_value_site_uv&#123;</span><br><span class="line">  color: #00BFFF;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="添加自定义404页面"><a href="#添加自定义404页面" class="headerlink" title="添加自定义404页面"></a>添加自定义404页面</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new page 404</span><br></pre></td></tr></table></figure>
-<p>编辑新建的页面文件，默认在站点根目录下 /source/404/index.md，在 front-matter 中添加 permalink: /404，表示指定该页面固定链接为 http://“主页”/404.html。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title: 404</span><br><span class="line">comments: false</span><br><span class="line">permalink: /404</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">&lt;center&gt;404 Not Found</span><br><span class="line">对不起，您所访问的页面不存在或者已删除</span><br><span class="line">[点击此处](https://sndgza.github.io/)返回首页</span><br><span class="line">&lt;/center&gt;</span><br><span class="line"> * 我的Github：[https://sndgza.github.io/](https://sndgza.github.io/)</span><br></pre></td></tr></table></figure>
-<h1 id="添加图片放大预览功能"><a href="#添加图片放大预览功能" class="headerlink" title="添加图片放大预览功能"></a>添加图片放大预览功能</h1><p>修改主题配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fancybox: true</span><br></pre></td></tr></table></figure>
-<h1 id="图片懒加载设置"><a href="#图片懒加载设置" class="headerlink" title="图片懒加载设置"></a>图片懒加载设置</h1><p>在主题配置文件中启用lazyload</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lazyload: true</span><br></pre></td></tr></table></figure>
-<h1 id="鼠标点击效果"><a href="#鼠标点击效果" class="headerlink" title="鼠标点击效果"></a>鼠标点击效果</h1><p>鼠标点击出现桃心+社会主义核心价值观，在next/source/js/下新建文件clickeffects.js，添加如下内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">!function (e, t, a) &#123;</span><br><span class="line">    function r() &#123;</span><br><span class="line">      for (var e = 0; e &lt; s.length; e++) s[e].alpha &lt;= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = &quot;left:&quot; + s[e].x + &quot;px;top:&quot; + s[e].y + &quot;px;opacity:&quot; + s[e].alpha + &quot;;transform:scale(&quot; + s[e].scale + &quot;,&quot; + s[e].scale + &quot;) rotate(45deg);background:&quot; + s[e].color + &quot;;z-index:99999&quot;);</span><br><span class="line">      requestAnimationFrame(r)</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function n() &#123;</span><br><span class="line">      var t = &quot;function&quot; == typeof e.onclick &amp;&amp; e.onclick;</span><br><span class="line">      e.onclick = function (e) &#123;</span><br><span class="line">        t &amp;&amp; t(), o(e)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function o(e) &#123;</span><br><span class="line">      var a = t.createElement(&quot;div&quot;);</span><br><span class="line">      a.className = &quot;heart&quot;, s.push(&#123;</span><br><span class="line">        el: a,</span><br><span class="line">        x: e.clientX - 10,</span><br><span class="line">        y: e.clientY - 5,</span><br><span class="line">        scale: 1,</span><br><span class="line">        alpha: 1,</span><br><span class="line">        color: c()</span><br><span class="line">      &#125;), t.body.appendChild(a)</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function i(e) &#123;</span><br><span class="line">      var a = t.createElement(&quot;style&quot;);</span><br><span class="line">      a.type = &quot;text/css&quot;;</span><br><span class="line">      try &#123;</span><br><span class="line">        a.appendChild(t.createTextNode(e))</span><br><span class="line">      &#125; catch (t) &#123;</span><br><span class="line">        a.styleSheet.cssText = e</span><br><span class="line">      &#125;</span><br><span class="line">      t.getElementsByTagName(&quot;head&quot;)[0].appendChild(a)</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    function c() &#123;</span><br><span class="line">      return &quot;rgb(&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;)&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    var s = [];</span><br><span class="line">    e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) &#123;</span><br><span class="line">      setTimeout(e, 1e3 / 60)</span><br><span class="line">    &#125;, i(&quot;.heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: &#x27;&#x27;;width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;&quot;), n(), r()</span><br><span class="line">  &#125;(window, document);</span><br><span class="line">  </span><br><span class="line">  /* 社会主体核心价值观效果 */</span><br><span class="line">  var a_idx = 0;</span><br><span class="line">  jQuery(document).ready(function ($) &#123;</span><br><span class="line">    $(&quot;body&quot;).click(function (e) &#123;</span><br><span class="line">      var a = new Array(&quot;富强&quot;, &quot;民主&quot;, &quot;文明&quot;, &quot;和谐&quot;, &quot;自由&quot;, &quot;平等&quot;, &quot;公正&quot;, &quot;法治&quot;, &quot;爱国&quot;, &quot;敬业&quot;, &quot;诚信&quot;, &quot;友善&quot;);</span><br><span class="line">      var $i = $(&quot;&lt;span/&gt;&quot;).text(a[a_idx]);</span><br><span class="line">      a_idx = (a_idx + 1) % a.length;</span><br><span class="line">      var x = e.pageX,</span><br><span class="line">        y = e.pageY;</span><br><span class="line">      $i.css(&#123;</span><br><span class="line">        &quot;z-index&quot;: 100000000,</span><br><span class="line">        &quot;top&quot;: y - 20,</span><br><span class="line">        &quot;left&quot;: x,</span><br><span class="line">        &quot;position&quot;: &quot;absolute&quot;,</span><br><span class="line">        &quot;font-weight&quot;: &quot;bold&quot;,</span><br><span class="line">        &quot;color&quot;: &quot;#ff6651&quot;</span><br><span class="line">      &#125;);</span><br><span class="line">      $(&quot;body&quot;).append($i);</span><br><span class="line">      $i.animate(&#123;</span><br><span class="line">        &quot;top&quot;: y - 180,</span><br><span class="line">        &quot;opacity&quot;: 0</span><br><span class="line">      &#125;, 1500, function () &#123;</span><br><span class="line">        $i.remove();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-<p>修改next/layout/_layout.swig文件，在文件底部 /body&gt; 之前添加代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- 页面点击效果 --&gt;</span><br><span class="line">  &lt;script type=&quot;text/javascript&quot; src=&quot;/js/clickeffects.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<h1 id="主页文章置顶"><a href="#主页文章置顶" class="headerlink" title="主页文章置顶"></a>主页文章置顶</h1><p>安装插件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ npm uninstall hexo-generator-index --save</span><br><span class="line">$ npm install hexo-generator-index-pin-top --save</span><br></pre></td></tr></table></figure>
-<p>然后在需要的文章的Front-matter中加上top: true即可。比如下面这篇文章：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: 主题next7.8版本配置(2)</span><br><span class="line">abbrlink: 2dbb31cc</span><br><span class="line">date: 2021-11-08 19:40:36</span><br><span class="line">top: true</span><br><span class="line">tags:</span><br><span class="line">    - next主题</span><br><span class="line">    - 建站</span><br><span class="line">categories:</span><br><span class="line">    - Hexo</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>设置置顶标志<br>打开：/blog/themes/next/layout/_macro 目录下的post.swig文件，定位到<div class="post-meta">标签下，插入如下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">    &lt;i class=&quot;fa fa-thumb-tack&quot;&gt;&lt;/i&gt;</span><br><span class="line">    &lt;font color=7D26CD&gt;置顶&lt;/font&gt;</span><br><span class="line">    &lt;span class=&quot;post-meta-divider&quot;&gt;|&lt;/span&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="设置代码块复制和代码高亮"><a href="#设置代码块复制和代码高亮" class="headerlink" title="设置代码块复制和代码高亮"></a>设置代码块复制和代码高亮</h1><p>在主题配置文件中修改codeblock</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">codeblock:</span><br><span class="line">  # Code Highlight theme</span><br><span class="line">  # Available values: normal | night | night eighties | night blue | night bright | solarized | solarized dark | galactic</span><br><span class="line">  # See: https://github.com/chriskempson/tomorrow-theme</span><br><span class="line">  highlight_theme: night eighties</span><br><span class="line">  # Add copy button on codeblock</span><br><span class="line">  copy_button:</span><br><span class="line">    enable: true</span><br><span class="line">    # Show text copy result.</span><br><span class="line">    show_result: true</span><br><span class="line">    # Available values: default | flat | mac</span><br><span class="line">    style:</span><br></pre></td></tr></table></figure>
-<h1 id="修改分类页面样式"><a href="#修改分类页面样式" class="headerlink" title="修改分类页面样式"></a>修改分类页面样式</h1><p>在主站source/_data/styles.styl中添加内容如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 分类&amp;&amp;标签 页面样式</span><br><span class="line">.post-block.page &#123;</span><br><span class="line">    margin-top: 40px;</span><br><span class="line">&#125;</span><br><span class="line">// 分类页面page</span><br><span class="line">.category-all-page &#123;</span><br><span class="line">    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);</span><br><span class="line">    background-color: #797D7F;</span><br><span class="line">    padding: 20px 30px 60px 30px;</span><br><span class="line">    border-radius: 25px 25px 25px 25px;</span><br><span class="line">&#125;</span><br><span class="line">.category-all-title &#123;</span><br><span class="line">    font-family: Impact;</span><br><span class="line">    font-size: 24px;</span><br><span class="line">    color: aqua;</span><br><span class="line">&#125;</span><br><span class="line">.category-list &#123;</span><br><span class="line">    overflow: auto;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li &#123;</span><br><span class="line">    height: 100%;</span><br><span class="line">    float: left;</span><br><span class="line">    border-right: 3px solid #222;</span><br><span class="line">    padding: 0 20px;</span><br><span class="line">&#125;</span><br><span class="line">.category-all ul li &#123;</span><br><span class="line">    list-style: none!important;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li:last-child &#123;</span><br><span class="line">    border-right: none;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li a &#123;</span><br><span class="line">    font-size: 16px;</span><br><span class="line">    text-decoration: none;</span><br><span class="line">    color: chartreuse;</span><br><span class="line">    font-family: Helvetica, Verdana, sans-serif;</span><br><span class="line">    // text-transform: uppercase;</span><br><span class="line">    -webkit-transition: all 0.5s ease;</span><br><span class="line">    -moz-transition: all 0.5s ease;</span><br><span class="line">    -o-transition: all 0.5s ease;</span><br><span class="line">    -ms-transition: all 0.5s ease;</span><br><span class="line">    transition: all 0.5s ease;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li a:hover &#123;</span><br><span class="line">    color: black;</span><br><span class="line">&#125;</span><br><span class="line">.category-list li.active a &#123;</span><br><span class="line">    font-weight: bold;</span><br><span class="line">    color: black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="在文章底部添加版权信息"><a href="#在文章底部添加版权信息" class="headerlink" title="在文章底部添加版权信息"></a>在文章底部添加版权信息</h1><p>编辑主题配置文件，修改如下配置:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">creative_commons:</span><br><span class="line">  license: by-nc-sa</span><br><span class="line">  sidebar: true</span><br><span class="line">  post: true</span><br><span class="line">  language:</span><br></pre></td></tr></table></figure>
-<h1 id="添加分享功能"><a href="#添加分享功能" class="headerlink" title="添加分享功能"></a>添加分享功能</h1><p>安装插件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install theme-next/hexo-next-share</span><br></pre></td></tr></table></figure>
-<p>在主题配置文件底部添加</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># NeedMoreShare2</span><br><span class="line"># Dependencies: https://github.com/theme-next/theme-next-needmoreshare2</span><br><span class="line"># For more information: https://github.com/revir/need-more-share2</span><br><span class="line"># iconStyle: default | box</span><br><span class="line"># boxForm: horizontal | vertical</span><br><span class="line"># position: top / middle / bottom + Left / Center / Right</span><br><span class="line"># networks:</span><br><span class="line"># Weibo | Wechat | Douban | QQZone | Twitter | Facebook | Linkedin | Mailto | Reddit | Delicious | StumbleUpon | Pinterest</span><br><span class="line"># GooglePlus | Tumblr | GoogleBookmarks | Newsvine | Evernote | Friendfeed | Vkontakte | Odnoklassniki | Mailru</span><br><span class="line">needmoreshare:</span><br><span class="line">  enable: true</span><br><span class="line">  cdn:</span><br><span class="line">    js: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js</span><br><span class="line">    css: //cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css</span><br><span class="line">  postbottom:</span><br><span class="line">    enable: true</span><br><span class="line">    options:</span><br><span class="line">      iconStyle: box</span><br><span class="line">      boxForm: horizontal</span><br><span class="line">      position: bottomCenter</span><br><span class="line">      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook</span><br><span class="line">  float:</span><br><span class="line">    enable: false</span><br><span class="line">    options:</span><br><span class="line">      iconStyle: box</span><br><span class="line">      boxForm: horizontal</span><br><span class="line">      position: middleRight</span><br><span class="line">      networks: Weibo,Wechat,Douban,QQZone,Twitter,Facebook</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>next主题</tag>
-        <tag>建站</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>用Hexo框架搭建自己的个人博客</title>
     <url>/post/7fb40f62.html</url>
     <content><![CDATA[<h1 id="Hexo框架的环境配置"><a href="#Hexo框架的环境配置" class="headerlink" title="Hexo框架的环境配置"></a>Hexo框架的环境配置</h1><p>本文是小应人生中第一篇博客，也用来记录小应在搭建自己的个人博客时的具体步骤，由于本人使用的是Windows系统，所以接下来的教程全是在Windows系统上的操作。</p>
@@ -323,7 +305,7 @@ done
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;你的GitHub用户名&quot;</span><br><span class="line">git config --global user.email &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
 <p>生成ssh密匙文件：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#x69;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#99;&#x6f;&#x6d;">&#103;&#x69;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#x2e;&#99;&#x6f;&#x6d;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
+<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#x67;&#x69;&#x74;&#64;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#x74;&#64;&#103;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
 <h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>也是进入<a href="https://nodejs.org/en/download/">官网</a>直接下载,注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/f680a3b706eb156d.png"><br>检测npm是否安装成功，在命令行中输入 npm -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/83debf122b282a21.png"><br>到这了，安装Hexo的环境已经全部搭建完成。</p>
 <h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架，这需要直自己在电脑里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。创建好后，进入文件夹中，按住示shift键，右击鼠标点击命令行<br><img data-src="https://pic1.zhimg.com/80/v2-a5450a466c0927c25dff8ad6f1d2046c_720w.jpg"><br>使用npm命令安装Hexo，输入</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo cli </span><br></pre></td></tr></table></figure>
@@ -353,5 +335,23 @@ done
       <tags>
         <tag>建站</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/post/16107.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
 </search>
