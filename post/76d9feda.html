@@ -23,16 +23,16 @@
     var CONFIG = {"hostname":"sndgza.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="进程间通信概述进程间通信：进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。 进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信  进程间的通信功能：（IPC）数据传输：一个进程需要将它的数据传输给另一个进程资源共享：多个进程之间共享同样的资源通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了">
+  <meta name="description" content="进程间通信概述进程间通信：进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信 进程间的通信功能：（IPC）数据传输：一个进程需要将它的数据传输给另一个进程资源共享：多个进程之间共享同样的资源通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了某种">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux系统编程学习(三)信号">
 <meta property="og:url" content="https://sndgza.github.io/post/76d9feda.html">
 <meta property="og:site_name" content="sndgza">
-<meta property="og:description" content="进程间通信概述进程间通信：进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。 进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信  进程间的通信功能：（IPC）数据传输：一个进程需要将它的数据传输给另一个进程资源共享：多个进程之间共享同样的资源通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了">
+<meta property="og:description" content="进程间通信概述进程间通信：进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信 进程间的通信功能：（IPC）数据传输：一个进程需要将它的数据传输给另一个进程资源共享：多个进程之间共享同样的资源通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了某种">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/965f90d7367fdf0b.png">
 <meta property="article:published_time" content="2021-11-26T01:08:34.000Z">
-<meta property="article:modified_time" content="2021-11-26T05:54:32.738Z">
+<meta property="article:modified_time" content="2021-11-26T06:10:16.636Z">
 <meta property="article:author" content="小应">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Linux-信号">
@@ -240,7 +240,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-11-26 09:08:34 / 修改时间：13:54:32" itemprop="dateCreated datePublished" datetime="2021-11-26T09:08:34+08:00">2021-11-26</time>
+              <time title="创建时间：2021-11-26 09:08:34 / 修改时间：14:10:16" itemprop="dateCreated datePublished" datetime="2021-11-26T09:08:34+08:00">2021-11-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -298,9 +298,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="进程间通信概述"><a href="#进程间通信概述" class="headerlink" title="进程间通信概述"></a>进程间通信概述</h1><h2 id="进程间通信："><a href="#进程间通信：" class="headerlink" title="进程间通信："></a>进程间通信：</h2><pre><code>进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。
-进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信
-</code></pre>
+        <h1 id="进程间通信概述"><a href="#进程间通信概述" class="headerlink" title="进程间通信概述"></a>进程间通信概述</h1><h2 id="进程间通信："><a href="#进程间通信：" class="headerlink" title="进程间通信："></a>进程间通信：</h2><p>进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。<br>进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信</p>
 <h2 id="进程间的通信功能："><a href="#进程间的通信功能：" class="headerlink" title="进程间的通信功能："></a>进程间的通信功能：</h2><p>（IPC）<br>数据传输：一个进程需要将它的数据传输给另一个进程<br>资源共享：多个进程之间共享同样的资源<br>通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了某种事件<br>进程控制：有些进程希望完全控制另一个进程的执行，此时控制进程希望能够拦截另一个进程的所有操作，并能及时知道它的状态发生改变</p>
 <h2 id="Linux操作系统支持的主义进程间通信的机制："><a href="#Linux操作系统支持的主义进程间通信的机制：" class="headerlink" title="Linux操作系统支持的主义进程间通信的机制："></a>Linux操作系统支持的主义进程间通信的机制：</h2><p><img data-src="https://i.bmp.ovh/imgs/2021/11/965f90d7367fdf0b.png"></p>
 <h2 id="进程间通信的实质"><a href="#进程间通信的实质" class="headerlink" title="进程间通信的实质"></a>进程间通信的实质</h2><p>系统只要创建一个进程就会给当前进程分配一个4G的虚拟内存（32位操作系统），内存条的空间称之为物理内存。虚拟内存和物理内存之间存在映射关系<br>4G的虚拟内存分为3G的用户内存和1G的内核空间，用户空间是当前进程所私有的，每一个进程的用户空间只能自己访问和使用。<br>内核空间是所有进程所公有的，也意味着绝大数进程间通信方式，本质就是对内核空间的操作</p>
