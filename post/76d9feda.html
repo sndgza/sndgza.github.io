@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-atom.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sndgza.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="进程间通信概述进程间通信：进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。 进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信  进程间的通信功能：（IPC）数据传输：一个进程需要将它的数据传输给另一个进程资源共享：多个进程之间共享同样的资源通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux系统编程学习(三)信号">
+<meta property="og:url" content="https://sndgza.github.io/post/76d9feda.html">
+<meta property="og:site_name" content="sndgza">
+<meta property="og:description" content="进程间通信概述进程间通信：进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。 进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信  进程间的通信功能：（IPC）数据传输：一个进程需要将它的数据传输给另一个进程资源共享：多个进程之间共享同样的资源通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/965f90d7367fdf0b.png">
+<meta property="article:published_time" content="2021-11-26T01:08:34.000Z">
+<meta property="article:modified_time" content="2021-11-26T05:53:45.849Z">
+<meta property="article:author" content="小应">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Linux-信号">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.bmp.ovh/imgs/2021/11/965f90d7367fdf0b.png">
+
+<link rel="canonical" href="https://sndgza.github.io/post/76d9feda.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>Linux系统编程学习(三)信号 | sndgza</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sndgza</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">IT博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/sndgza" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sndgza.github.io/post/76d9feda.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/QQ%E5%9B%BE%E7%89%8720211106165309.jpg">
+      <meta itemprop="name" content="小应">
+      <meta itemprop="description" content="知行合一">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sndgza">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux系统编程学习(三)信号
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-26 09:08:34 / 修改时间：13:53:45" itemprop="dateCreated datePublished" datetime="2021-11-26T09:08:34+08:00">2021-11-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/post/76d9feda.html" class="post-meta-item leancloud_visitors" data-flag-title="Linux系统编程学习(三)信号" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/post/76d9feda.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/post/76d9feda.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="进程间通信概述"><a href="#进程间通信概述" class="headerlink" title="进程间通信概述"></a>进程间通信概述</h1><h2 id="进程间通信："><a href="#进程间通信：" class="headerlink" title="进程间通信："></a>进程间通信：</h2><pre><code>进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。
+进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信
+</code></pre>
+<h2 id="进程间的通信功能："><a href="#进程间的通信功能：" class="headerlink" title="进程间的通信功能："></a>进程间的通信功能：</h2><p>（IPC）<br>数据传输：一个进程需要将它的数据传输给另一个进程<br>资源共享：多个进程之间共享同样的资源<br>通知事件：一个进程需要向另一个或一组进程发送消息，通知它们发生了某种事件<br>进程控制：有些进程希望完全控制另一个进程的执行，此时控制进程希望能够拦截另一个进程的所有操作，并能及时知道它的状态发生改变</p>
+<h2 id="Linux操作系统支持的主义进程间通信的机制："><a href="#Linux操作系统支持的主义进程间通信的机制：" class="headerlink" title="Linux操作系统支持的主义进程间通信的机制："></a>Linux操作系统支持的主义进程间通信的机制：</h2><p><img data-src="https://i.bmp.ovh/imgs/2021/11/965f90d7367fdf0b.png"></p>
+<h2 id="进程间通信的实质"><a href="#进程间通信的实质" class="headerlink" title="进程间通信的实质"></a>进程间通信的实质</h2><p>系统只要创建一个进程就会给当前进程分配一个4G的虚拟内存（32位操作系统），内存条的空间称之为物理内存。虚拟内存和物理内存之间存在映射关系<br>4G的虚拟内存分为3G的用户内存和1G的内核空间，用户空间是当前进程所私有的，每一个进程的用户空间只能自己访问和使用。<br>内核空间是所有进程所公有的，也意味着绝大数进程间通信方式，本质就是对内核空间的操作</p>
+<h2 id="特殊的进程间通信方式"><a href="#特殊的进程间通信方式" class="headerlink" title="特殊的进程间通信方式"></a>特殊的进程间通信方式</h2><p>socke通信可以实现不同主机的进程间通信，其他六个只能在一台主机的多个进程间通信<br>信号通信是唯一的一种异步通信机制<br>共享内存是所有进程间通信方式中效率最高的，直接对物理内存进行操作</p>
+<h1 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>信号是软件中断，它是软件层次是对中断机制的一种模拟<br>    信号可以导致一个正在运行的进程被另一个正在运行的异步进程中断，转而处理某一突发事件<br>信号是一种异步通信方式<br>    进程不必等待信号的到达，进程也不知道信号什么时候到达。<br>信号可以直接进行用户空间进程和内核空间进程的交互，内核进程可以利用它来通知用户空间发生了哪些系统事件。<br>每个信号都以字符SIG开头，与一个数字编码相对应，在头文件signum.h中，这些信号都被定义为正整数<br>可使用kill -l 查看这些信号和编码的对应关系<br>信号是当前系统已经定义好的标识，每一个标识都会在特定场合使用，当进程产生时，会让当前进程做出相应的操作</p>
+<h2 id="信号产生的方式"><a href="#信号产生的方式" class="headerlink" title="信号产生的方式"></a>信号产生的方式</h2><p>1.当用户按某些终端键时，将产生信号<br>2.硬件异常将产生信号<br>3.软件异常将产生信号<br>4.调用kill函数将发送信号<br>5.运行kill命令将发送信号</p>
+<h2 id="信号的处理方式"><a href="#信号的处理方式" class="headerlink" title="信号的处理方式"></a>信号的处理方式</h2><p>当进程中产生了一个信号就会让当前进程做出一定的反应，处理的方式如下：<br>1、终止进程：当信号产生后，当前进程就会立即结束<br>2、缺省处理：当信号产生后，当前进程不做任何操作<br>3、停止处理：当信号产生后，使得当前进程停止<br>4、让停止进程恢复运行：当信号产生后，停止的进程会恢复执行<br>5、执行自定义信号处理函数</p>
+<h2 id="常见的信号"><a href="#常见的信号" class="headerlink" title="常见的信号"></a>常见的信号</h2><p>信号表：</p>
+<p>取值    名称         解释                            默认动作<br>1        SIGHUP        挂起<br>2        SIGINT        中断<br>3        SIGQUIT        退出<br>4        SIGILL        非法指令<br>5        SIGTARP        断点或陷阱指令<br>6        SIGABRT        abort发出的信号<br>7        SIGBUS        非法内存访问<br>8        SIGFPE        浮点异常<br>9        SIGKILL        kill信号                        不能被忽略、处理和阻塞<br>10        SIGUSR1        用户信号1<br>11        SIGSEGV        无效内存访问<br>12        SIGUSR2        用户信号2<br>13        SIGPIPE        管道破损，没有读端的管道写数据<br>14        SIGALRM        alarm发出的信号<br>15        SIGTERM        终止信号<br>16        SIGSTKFLT    栈溢出<br>17        SIGCHLD        子进程退出                        默认忽略<br>18        SIGCONT        进程继续<br>19        SIGSTOP        进程停止                        不能被忽略、处理和阻塞<br>20        SIGSTP        进程停止<br>21        SIGTTIN        进程停止，后台进程从终端读数据时<br>22        SIGTTOU        进程停止，后台进程想从终端写数据时<br>23        SIGURG        I/O有紧急数据到达当前进程          默认忽略<br>24        SIGXCPU        进程的CPU时间片到期<br>25        SIGXFSZ        文件大小的超出上限<br>26        SIGVTALRM    虚拟时钟超时<br>27        SIGPROF        profile时钟超时<br>28        SIGWINCH    窗口大小改变                        默认忽略<br>29        SIGIO        I/O相关<br>30        SIGPWR        关机                            默认忽略<br>31        SIGSYS        系统调用异常    </p>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="kill函数"><a href="#kill函数" class="headerlink" title="kill函数"></a>kill函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    给指定进程发送信号</span><br><span class="line">parameter：</span><br><span class="line">    pid：进程号</span><br><span class="line">    pid&gt;0:</span><br><span class="line">            发送信号进程ID等于pid的子进程</span><br><span class="line">        pid=0:</span><br><span class="line">            将信号发送给当前进程所在的进程组中的所有进程</span><br><span class="line">        pid=-1：</span><br><span class="line">            将进程发送给系统内所有的进程，除了init进程</span><br><span class="line">        pid&lt;-1：</span><br><span class="line">            将信号传给指定指定进程组的所有进程，这个进程组号等于pid的绝对值。</span><br><span class="line">    signum：信号编号</span><br><span class="line">return：</span><br><span class="line">    成功返回 0，失败返回 -1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int kill(pid_t pid,int signum);</span><br></pre></td></tr></table></figure>
+<h2 id="alarm函数"><a href="#alarm函数" class="headerlink" title="alarm函数"></a>alarm函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    在seconds秒后，向调用进程发送一个SIGALRM信号，SIGALRM的，默认动作是终止调用alarm函数的进程</span><br><span class="line">parameter：</span><br><span class="line">    seconds：定时的秒数</span><br><span class="line">return：</span><br><span class="line">    若以前没有设置过定时器，或设置的定时器已超时，返回0；否则返回定时器剩余的秒数，并重新设定定时器</span><br><span class="line">******************************************************************************/</span><br><span class="line">unsigned int alarm(unsigned int seconds);</span><br></pre></td></tr></table></figure>
+<h2 id="raise函数"><a href="#raise函数" class="headerlink" title="raise函数"></a>raise函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    给调用进程本身发送一个信号</span><br><span class="line">parameter：</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int raise(int signun);</span><br></pre></td></tr></table></figure>
+<h2 id="abort函数"><a href="#abort函数" class="headerlink" title="abort函数"></a>abort函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    向进程发送一个SIGABRT信号，默认情况下进程会退出</span><br><span class="line">    即使SIGABRT信号被加入阻塞集，一旦进程调用了abort()函数,进程也会被终止，并在终止前刷新缓冲区，关闭文件描述符</span><br><span class="line">******************************************************************************/</span><br><span class="line">void abort(void);</span><br></pre></td></tr></table></figure>
+<h2 id="pause函数"><a href="#pause函数" class="headerlink" title="pause函数"></a>pause函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    将调用进程挂起直至捕捉到信号为止。这个函数 通常用于判断信号是否已到。</span><br><span class="line">return:</span><br><span class="line">    直到捕获到信号，pause函数才会返回-1，切errno被设置成EINTR</span><br><span class="line">******************************************************************************/</span><br><span class="line">int pause(void);</span><br></pre></td></tr></table></figure>
+<h2 id="signal函数"><a href="#signal函数" class="headerlink" title="signal函数"></a>signal函数</h2><p>程序可用函数signal()函数改变信号的处理方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    注册信号处理函数（不可用于SIGKILL、SIGSTOP信号），即确定收到信号后处理函数的入口地址</span><br><span class="line">parameter：</span><br><span class="line">    signum：</span><br><span class="line">        信号的编号</span><br><span class="line">    handler：</span><br><span class="line">        忽略该信号：SIG_IGN</span><br><span class="line">        执行系统默认动作：SIG_DFL</span><br><span class="line">        自定义信号处理函数：信号处理函数名</span><br><span class="line">return：</span><br><span class="line">    成功：返回函数地址，上一次注册的信号处理函数地址</span><br><span class="line">    失败：SIG_ERR</span><br><span class="line">******************************************************************************/</span><br><span class="line">typedef void (*sighander_t)(int);</span><br><span class="line">sighandler_t signal(int signum,sighandler_t handler);</span><br></pre></td></tr></table></figure>
+<h2 id="可重入函数"><a href="#可重入函数" class="headerlink" title="可重入函数"></a>可重入函数</h2><p>可重入函数是指函数可以由多个任务并发使用，而不必担心数据错误<br>可重入函数就是可以被中断的函数，当前函数可以在任意时刻中断它，并执行另一块代码，当执行完毕后，回到原本的代码还可以正常继续运行<br>编写可重入函数：<br>1、不使用返回静态的数据、全局变量<br>2、不调用动态内存分配、释放的函数<br>3、不调用任何不可重入的函数（如标准I/O)</p>
+<h1 id="信号集"><a href="#信号集" class="headerlink" title="信号集"></a>信号集</h1><h2 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h2><pre><code>一个用户进程常常需要对多个信号做出处理。为了方便对多个信号进行处理，在Linux系统中引入 了信号集
+信号集是用来表示多个信号的数据类型
+信号集数据类型： sigset_t
+头文件：sigset.h
+</code></pre>
+<h2 id="信号集相关操作函数"><a href="#信号集相关操作函数" class="headerlink" title="信号集相关操作函数"></a>信号集相关操作函数</h2><pre><code>sigemptyset
+sigfillset
+sigismember
+sigaddset
+sigdelset
+</code></pre>
+<h3 id="sigemptysethans"><a href="#sigemptysethans" class="headerlink" title="sigemptysethans"></a>sigemptysethans</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    初始化由set指向的信号集，清除其中所有的信号即初始化一个空信号集</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigemptyset(sigset_t *set);</span><br></pre></td></tr></table></figure>
+<h3 id="sigfillset函数"><a href="#sigfillset函数" class="headerlink" title="sigfillset函数"></a>sigfillset函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    初始化由set指向的信号集，将信号集合设置为所有信号的集合</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigfillset(sigset_t *set);</span><br></pre></td></tr></table></figure>
+<h3 id="sigismember函数"><a href="#sigismember函数" class="headerlink" title="sigismember函数"></a>sigismember函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    查询signum标识的信号是否在信号集合set之中</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功：在信号集中返回 1，不在信号集中返回 0</span><br><span class="line">    错误：返回 -1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigismember(const sigset_t *set,int signum);</span><br></pre></td></tr></table></figure>
+<h3 id="sigaddset函数"><a href="#sigaddset函数" class="headerlink" title="sigaddset函数"></a>sigaddset函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    将信号signum加入到信号集set中</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigaddset(sigset_t *set，int signum);</span><br></pre></td></tr></table></figure>
+<h3 id="sigdelset"><a href="#sigdelset" class="headerlink" title="sigdelset"></a>sigdelset</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    将信号signum从信号集set中删除</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigdelset(sigset_t *set，int signum);</span><br></pre></td></tr></table></figure>
+<h2 id="信号阻塞集"><a href="#信号阻塞集" class="headerlink" title="信号阻塞集"></a>信号阻塞集</h2><pre><code>每个信号都有一个阻塞集，它用来描述哪些信号递送到改进程的时候被阻塞（在信号发生时记住它，直到进程准备好时再将信号通知进程）。
+所谓阻塞并不是禁止传送信号，而是暂缓信号的传送。若将被阻塞的信号从信号阻塞集中删除，且对应的信号在被阻塞时发生了，进程将会收到相应的信号。
+</code></pre>
+<h3 id="sigprocmask函数"><a href="#sigprocmask函数" class="headerlink" title="sigprocmask函数"></a>sigprocmask函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    检查或修改信号阻塞集，根据how指定的方法对进程的阻塞集合进行修改，新的新华阻塞集由set指定，而原先的信号阻塞集合由oldset保存</span><br><span class="line">parameter：</span><br><span class="line">    how：信号阻塞的修改方法、</span><br><span class="line">        SIG_BLOCK：向信号阻塞集中添加set集合</span><br><span class="line">        SIG_UNBLOCK：从信号阻塞集中删除set集合</span><br><span class="line">        SIG_SETMASK：将信号阻塞集合设为set集合</span><br><span class="line">    set：要操作的信号集地址</span><br><span class="line">    oldset：保存原先信号集地址</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigprocmask(int how,const sigset_t *set,sigset_t *oldset);</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/mm_facetoface_collect_qrcode_1636083025972.png" alt="小应 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/1636161195.png" alt="小应 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小应
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://sndgza.github.io/post/76d9feda.html" title="Linux系统编程学习(三)信号">https://sndgza.github.io/post/76d9feda.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Linux-%E4%BF%A1%E5%8F%B7/" rel="tag"># Linux-信号</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/de546f7d.html" rel="prev" title="Linux系统编程学习(二)进程">
+      <i class="fa fa-chevron-left"></i> Linux系统编程学习(二)进程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E6%A6%82%E8%BF%B0"><span class="nav-text">进程间通信概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A"><span class="nav-text">进程间通信：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8A%9F%E8%83%BD%EF%BC%9A"><span class="nav-text">进程间的通信功能：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%94%AF%E6%8C%81%E7%9A%84%E4%B8%BB%E4%B9%89%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%9A%84%E6%9C%BA%E5%88%B6%EF%BC%9A"><span class="nav-text">Linux操作系统支持的主义进程间通信的机制：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%9A%84%E5%AE%9E%E8%B4%A8"><span class="nav-text">进程间通信的实质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="nav-text">特殊的进程间通信方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7"><span class="nav-text">信号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E4%BA%A7%E7%94%9F%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-text">信号产生的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-text">信号的处理方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BF%A1%E5%8F%B7"><span class="nav-text">常见的信号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#kill%E5%87%BD%E6%95%B0"><span class="nav-text">kill函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#alarm%E5%87%BD%E6%95%B0"><span class="nav-text">alarm函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#raise%E5%87%BD%E6%95%B0"><span class="nav-text">raise函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#abort%E5%87%BD%E6%95%B0"><span class="nav-text">abort函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pause%E5%87%BD%E6%95%B0"><span class="nav-text">pause函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#signal%E5%87%BD%E6%95%B0"><span class="nav-text">signal函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%87%8D%E5%85%A5%E5%87%BD%E6%95%B0"><span class="nav-text">可重入函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%9B%86"><span class="nav-text">信号集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%9B%86%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="nav-text">信号集相关操作函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sigemptysethans"><span class="nav-text">sigemptysethans</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigfillset%E5%87%BD%E6%95%B0"><span class="nav-text">sigfillset函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigismember%E5%87%BD%E6%95%B0"><span class="nav-text">sigismember函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigaddset%E5%87%BD%E6%95%B0"><span class="nav-text">sigaddset函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigdelset"><span class="nav-text">sigdelset</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%98%BB%E5%A1%9E%E9%9B%86"><span class="nav-text">信号阻塞集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sigprocmask%E5%87%BD%E6%95%B0"><span class="nav-text">sigprocmask函数</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="小应"
+      src="/images/QQ%E5%9B%BE%E7%89%8720211106165309.jpg">
+  <p class="site-author-name" itemprop="name">小应</p>
+  <div class="site-description" itemprop="description">知行合一</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sndgza" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sndgza" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/2415718525@qq.com" title="E-Mail → 2415718525@qq.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sndgza</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">32k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">29 分钟</span>
+</div>
+
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>  
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("11/06/2021 09:47:33");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+}
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='60,179,113' opacity='1' zIndex='-1' count='100' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'RpGgLaoNw4fW1O6XMn4HlnLK-gzGzoHsz',
+      appKey     : 'QaSqUY5PxgLNnzKCAklCwEu3',
+      placeholder: "ヾﾉ≧∀≦)o来啊，快活啊!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/clicklove.js"></script>
+  
+</body>
+</html>
+
+  
