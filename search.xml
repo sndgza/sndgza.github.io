@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统编程 学习(四)管道、命名管道</title>
+    <url>/post/1e39d98d.html</url>
+    <content><![CDATA[<h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><p>管道又称无名管道<br>无名管道是一种特殊的文件描述符，在应用层体现为两给打开的文件描述符<br>无名管道就是创建在内存空间的，多个进程知道同一个无名管道的空间就可以利用它来通信<br><img data-src="https://i.bmp.ovh/imgs/2021/11/2c490969525bfcf3.png"><br>管道是最古老的UNIXIPC方式，其特点是：<br>1、半双工<br>2、数据只能从管道的一端写入，另一端读出<br>3、写入管道的数据遵循先入先出的规则<br>4、管道所传输的数据是无格式的，这就要求管道的读出方盒写入方必须现约定好数据格式<br>5、管道不是普通文件，不属于某个文件系统<br>6、管道在内存中对应一个缓冲区。不同的系统大小不一定相同<br>7、从管道读数据是一次性操作，数据一旦被读走，它就从管道中被抛弃，释放空间，以便写更多的数据<br>8、管道没有名字，只能在具有公共祖先的进程之间使用。、</p>
+<h2 id="无名管道的创建"><a href="#无名管道的创建" class="headerlink" title="无名管道的创建"></a>无名管道的创建</h2><p>pipe函数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    经由filedes返回两个文件描述符</span><br><span class="line">parameter: filedes</span><br><span class="line">    filedes为int型数组的首地址，其存放了管道的文件描述符fd[0],fd[1]。</span><br><span class="line">    filedes[0]为读而打开，filedes[1]为写而打开管道，filedes[1]的输入是filedes[0]的输出</span><br><span class="line">return：</span><br><span class="line">    成功返回 0 </span><br><span class="line">    失败返回 -1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int pipe(int filedes[2]);</span><br></pre></td></tr></table></figure>
+<h2 id="从管道读数据的特点"><a href="#从管道读数据的特点" class="headerlink" title="从管道读数据的特点"></a>从管道读数据的特点</h2><p>1、默认用read函数从管道中读数据是阻塞的<br>2、调用write函数向管道里写数据，当缓冲区已满数write也会阻塞<br>3、通信过程中，读端口全部关闭后，写进程向管道内写数据时，写进程会退出</p>
+<h2 id="无名管道的读写规律"><a href="#无名管道的读写规律" class="headerlink" title="无名管道的读写规律"></a>无名管道的读写规律</h2><p>1、读写端都存在只读不写<br>  如果管道中有数据会正常读取数据，如果管道中没有数据，则读操作会阻塞，直到有数据<br>2、读写都存在，只写不读<br>  如果一直执行写操作，则无名管道对应的缓冲区会被写满，写满之后，write函数也会阻塞等待，默认无名管道的缓冲区64k字节<br>3、只有读端<br>  如果原本管道中有数据，则读操作正常执行，如果没有数据则返回0<br>4、只有写端<br>  如果关闭读端，一旦执行写操作，就会产生一个信号SIGPIPE（管道破裂），这个信号默认处理信号是退出进程。</p>
+<h2 id="通过fcntl设置文件阻塞特性"><a href="#通过fcntl设置文件阻塞特性" class="headerlink" title="通过fcntl设置文件阻塞特性"></a>通过fcntl设置文件阻塞特性</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//设置为阻塞</span><br><span class="line">fcntl(fd,F_SETFL,0);</span><br><span class="line">//设置为非阻塞,如果管道中，没有数据，则read函数立刻返回，执行接下来的代码</span><br><span class="line">fcntl(fd,F_SETFL,O_NONBLOCK);</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件描述符的复制"><a href="#文件描述符的复制" class="headerlink" title="文件描述符的复制"></a>文件描述符的复制</h2><p><strong>dup函数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    复制oldfd文件描述符，并分配一个新的文件描述符，新的文件描述符是调用进程文件描述表中最小可用的文件描述符</span><br><span class="line">parameter: oldfd</span><br><span class="line">    要复制的文件描述符</span><br><span class="line">return：</span><br><span class="line">    成功返回 新的文件描述符 </span><br><span class="line">    失败返回 -1，错误代码存于errno中</span><br><span class="line">******************************************************************************/</span><br><span class="line">int dup(int oldfd);</span><br></pre></td></tr></table></figure>
+<p><strong>dup2函数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    复制一份打开的文件描述符oldfd，并分配新的文件描述符newfd，newfd也标识oldfd所标识的文件</span><br><span class="line">parameter: oldfd,newfd</span><br><span class="line">    oldfd:要复制的文件描述符</span><br><span class="line">    newfd:分配的新的文件描述符</span><br><span class="line">return：</span><br><span class="line">    成功返回 newfd</span><br><span class="line">    失败返回 -1，错误代码存于errno中</span><br><span class="line">******************************************************************************/</span><br><span class="line">int dup2(int oldfd);</span><br></pre></td></tr></table></figure>
+<h2 id="命名管道的特点"><a href="#命名管道的特点" class="headerlink" title="命名管道的特点"></a>命名管道的特点</h2><p>1、半双工<br>2、数据遵循先进先出<br>3、FIFO所传输的数据是无格式的<br>4、FIFO在文件系统中作为一个特殊的文件而存在并且在文件系统中可见，但FIFO中的内容却存在内存中<br>5、管道在内存中对应一个缓冲区<br>6、从FIFO中读数据是一次性操作，数据一旦被读取就被抛弃，释放空间以便写更多的数据<br>7、当使用FIFO的进程退出后，FIFO的文件将继续保存在文件系统中以便以后使用<br>8、FIFO是有名字的，不相关的进程可以通过打开命名管道进行通信</p>
+<h2 id="如何创建命名管道"><a href="#如何创建命名管道" class="headerlink" title="如何创建命名管道"></a>如何创建命名管道</h2><p>1、通过mkfifo命令创建<br>2、使用mkfifo函数创建</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;sys/types&gt;</span><br><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    创建一个有名管道，产生一个本地文件系统可见的文件pathname</span><br><span class="line">parameter:</span><br><span class="line">    pathname:有名管道创建后生成的文件，可带路径名</span><br><span class="line">    mode:管道文件的权限，一般通过八进制数描述</span><br><span class="line">return：</span><br><span class="line">    成功返回 0</span><br><span class="line">    失败返回 -1，错误代码存于errno中</span><br><span class="line">******************************************************************************/</span><br><span class="line">int mkfifo(const char *pathname,mode_t mode);</span><br></pre></td></tr></table></figure>
+<p>不能使用lseek修改管道文件的偏移量，有名管道创建的文件只是起到标识作用，真正有名管道实现进程间通信还是在内核空间开辟内存，所以本地产生的文件只是一个标识，没有其他作用，对本地管道文件的操作实质是对内存空间的操作<br>由于有名管道在本地创建了一个管道文件，所以不相关的进程间也可以实现通信</p>
+<h2 id="有名管道的读写规律"><a href="#有名管道的读写规律" class="headerlink" title="有名管道的读写规律"></a>有名管道的读写规律</h2><p>1、读写端都存在，只读不写<br>若管道当中原本有数据，正常读写，当管道中没有数据时则读操作阻塞<br>2、读写端都存在，只写不读<br>如果一直执行写操作，当有名管道的数据缓冲区写满时，write函数会发生阻塞<br>3、只有读端，没有写端<br>在一个进程中只有读端没有写端，在open函数的位置阻塞<br>4、只有写端，没有读端<br>在一个进程中只有写端没有读端，在open函数的位置阻塞<br>5、一个进程负责只读，一个进程负责只写<br>只要保证有名管道的读写端都存在，不管是几个进程都不会再open阻塞了<br>如果一个进程只读一个进程只写，都运行后，如果关闭写段，read会返回0<br>如果一个进程只读一个进程只写，都运行后，如果关闭读段，写端会立即产生SIGPIPE信号，默认的处理方式是退出进程</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Linux-管道</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux系统编程学习(三)信号</title>
     <url>/post/76d9feda.html</url>
     <content><![CDATA[<h1 id="进程间通信概述"><a href="#进程间通信概述" class="headerlink" title="进程间通信概述"></a>进程间通信概述</h1><h2 id="进程间通信："><a href="#进程间通信：" class="headerlink" title="进程间通信："></a>进程间通信：</h2><p>进程是一个独立的资源分配单元，不同进程之间的资源是独立的，没有关联，不能在一个进程当中直接访问另一个进程的资源。<br>进程不是孤立的，不同的进程需要进行信息的交互和状态的传递等，因此需要进程间的通信</p>
@@ -32,11 +60,11 @@ sigismember
 sigaddset
 sigdelset
 </code></pre>
-<h3 id="sigemptysethans"><a href="#sigemptysethans" class="headerlink" title="sigemptysethans"></a>sigemptysethans</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    初始化由set指向的信号集，清除其中所有的信号即初始化一个空信号集</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigemptyset(sigset_t *set);</span><br></pre></td></tr></table></figure>
+<h3 id="sigemptyset函数"><a href="#sigemptyset函数" class="headerlink" title="sigemptyset函数"></a>sigemptyset函数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    初始化由set指向的信号集，清除其中所有的信号即初始化一个空信号集</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigemptyset(sigset_t *set);</span><br></pre></td></tr></table></figure>
 <h3 id="sigfillset函数"><a href="#sigfillset函数" class="headerlink" title="sigfillset函数"></a>sigfillset函数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    初始化由set指向的信号集，将信号集合设置为所有信号的集合</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigfillset(sigset_t *set);</span><br></pre></td></tr></table></figure>
 <h3 id="sigismember函数"><a href="#sigismember函数" class="headerlink" title="sigismember函数"></a>sigismember函数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    查询signum标识的信号是否在信号集合set之中</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功：在信号集中返回 1，不在信号集中返回 0</span><br><span class="line">    错误：返回 -1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigismember(const sigset_t *set,int signum);</span><br></pre></td></tr></table></figure>
 <h3 id="sigaddset函数"><a href="#sigaddset函数" class="headerlink" title="sigaddset函数"></a>sigaddset函数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    将信号signum加入到信号集set中</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigaddset(sigset_t *set，int signum);</span><br></pre></td></tr></table></figure>
-<h3 id="sigdelset"><a href="#sigdelset" class="headerlink" title="sigdelset"></a>sigdelset</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    将信号signum从信号集set中删除</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigdelset(sigset_t *set，int signum);</span><br></pre></td></tr></table></figure>
+<h3 id="sigdelset函数"><a href="#sigdelset函数" class="headerlink" title="sigdelset函数"></a>sigdelset函数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    将信号signum从信号集set中删除</span><br><span class="line">parameter：</span><br><span class="line">    set：信号集标识的地址，以后操作此信号集，对set进行操作就可以了</span><br><span class="line">    signum：信号的编号</span><br><span class="line">return：</span><br><span class="line">    成功返回0，失败返回-1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int sigdelset(sigset_t *set，int signum);</span><br></pre></td></tr></table></figure>
 <h2 id="信号阻塞集"><a href="#信号阻塞集" class="headerlink" title="信号阻塞集"></a>信号阻塞集</h2><pre><code>每个信号都有一个阻塞集，它用来描述哪些信号递送到改进程的时候被阻塞（在信号发生时记住它，直到进程准备好时再将信号通知进程）。
 所谓阻塞并不是禁止传送信号，而是暂缓信号的传送。若将被阻塞的信号从信号阻塞集中删除，且对应的信号在被阻塞时发生了，进程将会收到相应的信号。
 </code></pre>
@@ -104,7 +132,7 @@ int execve(const char *pathname,char *const argv[],char *const envp[]);
   <entry>
     <title>Linux系统编程学习(一)文件读写以及系统调用函数</title>
     <url>/post/dee8d7af.html</url>
-    <content><![CDATA[<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#define STDIN_FILENO    0   //标准输入文件</span><br><span class="line">#define STDOUT_FILENO   1   //标准输出文件</span><br><span class="line">#define STDERR_FILENO   0   //标准错误文件</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#define STDIN_FILENO    0   //标准输入文件</span><br><span class="line">#define STDOUT_FILENO   1   //标准输出文件</span><br><span class="line">#define STDERR_FILENO   2   //标准错误文件</span><br></pre></td></tr></table></figure>
 <p>文件IO      标准IO<br>0           stdin<br>1           stdout<br>2           stderr</p>
 <h2 id="open-函数"><a href="#open-函数" class="headerlink" title="open 函数"></a>open 函数</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//当文件存在时使用</span><br><span class="line">int open(const char *pathname,int flags);</span><br><span class="line">//当文件不存在时使用</span><br><span class="line">int open(const char *pathname,int flags,mode_t mode);</span><br><span class="line"></span><br><span class="line">/******************************************************************</span><br><span class="line">flags 取值</span><br><span class="line">O_RDONLY    只读打开</span><br><span class="line">O_WRONLY    只写打开</span><br><span class="line">O_RDWR      可读可写打开</span><br><span class="line"></span><br><span class="line">O_CREAT     文件不存在则创建文件</span><br><span class="line">O_EXCL      如果指定O_CERAT且文件已存在，则出错</span><br><span class="line">O_TRUNC     如果文件存在，则清空文件内容</span><br><span class="line">O_APPEND    写文件时数据添加到文件末尾</span><br><span class="line">O_NONBLOC   当打开的文件是FIFO、字符文件、块文件时，此选项为非阻塞标志位态</span><br><span class="line"></span><br><span class="line">mode</span><br><span class="line">使用八进制数表示文件所有者、所有者同组、其他用户权限</span><br><span class="line">R 4</span><br><span class="line">W 2</span><br><span class="line">X 1</span><br><span class="line"></span><br><span class="line">返回值</span><br><span class="line">成功：返回文件描述符</span><br><span class="line">失败：返回-1</span><br><span class="line">***********************************************************************/</span><br></pre></td></tr></table></figure>
 <h2 id="函数调用出错后输出错误信息"><a href="#函数调用出错后输出错误信息" class="headerlink" title="函数调用出错后输出错误信息"></a>函数调用出错后输出错误信息</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">通过全局变量errno</span><br><span class="line">    #include &quot;error.h&quot;</span><br><span class="line">    errno是一个全局变量，当函数调用失败后，可以通过errno获取错误码</span><br><span class="line">通过一个函数perror</span><br><span class="line">    #include &quot;stdio.h&quot;</span><br><span class="line">    void perror(const char *s);</span><br><span class="line">    功能：输出函数调用的错误信息</span><br><span class="line">    参数: s 打印错误信息 </span><br></pre></td></tr></table></figure>
@@ -155,10 +183,11 @@ done
 <p>函数返回：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">return 返回值</span><br><span class="line">#可通过使用 $? 条用返回值但 $? 最大显示值为255</span><br><span class="line">#可直接调用返回变量</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>linux-shell</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>shell</tag>
+        <tag>Linux</tag>
+        <tag>Linux-shell</tag>
       </tags>
   </entry>
   <entry>
@@ -191,10 +220,11 @@ done
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">num=100</span><br><span class="line">#test $num -ge 0 &amp;&amp; test $num -lt 101</span><br><span class="line">test $num -ge 0 -a $num  -lt 101</span><br><span class="line">#判断num是否大于0小于101</span><br><span class="line">echo &quot;$?&quot; </span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux-shell</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>shell</tag>
+        <tag>Linux</tag>
+        <tag>Linux-shell</tag>
       </tags>
   </entry>
   <entry>
@@ -214,10 +244,11 @@ done
 </blockquote>
 ]]></content>
       <categories>
-        <category>linux-shell</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>shell</tag>
+        <tag>Linux</tag>
+        <tag>Linux-shell</tag>
       </tags>
   </entry>
   <entry>
@@ -354,7 +385,7 @@ done
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;你的GitHub用户名&quot;</span><br><span class="line">git config --global user.email &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
 <p>生成ssh密匙文件：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;你的GitHub注册邮箱&quot;</span><br></pre></td></tr></table></figure>
-<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;">&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#x62;&#46;&#99;&#111;&#109;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
+<p>然后三个回车即可，默认不需要密码<br>找到生成的ssh文件夹中的id_rsa.pub密匙，将内容全部复制<br>打开<a href="https://github.com/settings/keys">GitH_Settings_Keys</a>页面，新建new SSH Key<br><img data-src="https://pic1.zhimg.com/v2-72a3f22c080e99343c3cc4aabce10e3c_r.jpg"><br>Title为标题，任意填即可，将刚刚复制的id_rsa.pub内容粘贴进去，最后点击Add SSH key。在Git Bash中检测GitHub公钥设置是否成功，输入 ssh <a href="mailto:&#x67;&#x69;&#116;&#x40;&#103;&#x69;&#116;&#104;&#117;&#x62;&#46;&#x63;&#111;&#x6d;">&#x67;&#x69;&#116;&#x40;&#103;&#x69;&#116;&#104;&#117;&#x62;&#46;&#x63;&#111;&#x6d;</a> ：<br><img data-src="https://pic3.zhimg.com/80/v2-da481ffa686410becd4186c656b4ebd6_720w.jpg"><br>如上则说明成功。</p>
 <h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>也是进入<a href="https://nodejs.org/en/download/">官网</a>直接下载,注意安装Node.js会包含环境变量及npm的安装，安装后检测Node.js是否安装成功，在命令行中输入 node -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/f680a3b706eb156d.png"><br>检测npm是否安装成功，在命令行中输入 npm -v:<br><img data-src="https://i.bmp.ovh/imgs/2021/11/83debf122b282a21.png"><br>到这了，安装Hexo的环境已经全部搭建完成。</p>
 <h1 id="搭建网站"><a href="#搭建网站" class="headerlink" title="搭建网站"></a>搭建网站</h1><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们的个人博客网站的框架，这需要直自己在电脑里创建一个文件夹，可以命名为Blog，Hexo框架与以后你自己发布的网页都在这个文件夹中。创建好后，进入文件夹中，按住示shift键，右击鼠标点击命令行<br><img data-src="https://pic1.zhimg.com/80/v2-a5450a466c0927c25dff8ad6f1d2046c_720w.jpg"><br>使用npm命令安装Hexo，输入</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo cli </span><br></pre></td></tr></table></figure>

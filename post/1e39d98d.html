@@ -23,21 +23,23 @@
     var CONFIG = {"hostname":"sndgza.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":true,"preload":true},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="shell 脚本的定义与执行1、定义开头：   #!&#x2F;bin&#x2F;bash               #！用来声明当前脚本文件的shell解释器的类型，如果不写则为默认的shell2、编写代码     单个#表示注释3、执行    chmod +x xxx.sh .&#x2F;xxx.sh 修改为可执行权限后执行 检测#!，使用#！指定的bash读取解释，没有则使用默认的bash    bash test.s">
+  <meta name="description" content="管道概述：管道又称无名管道无名管道是一种特殊的文件描述符，在应用层体现为两给打开的文件描述符无名管道就是创建在内存空间的，多个进程知道同一个无名管道的空间就可以利用它来通信管道是最古老的UNIXIPC方式，其特点是：1、半双工2、数据只能从管道的一端写入，另一端读出3、写入管道的数据遵循先入先出的规则4、管道所传输的数据是无格式的，这就要求管道的读出方盒写入方必须现约定好数据格式5、管道不是普通文">
 <meta property="og:type" content="article">
-<meta property="og:title" content="shell学习（1）变量">
-<meta property="og:url" content="https://sndgza.github.io/post/24ad253c.html">
+<meta property="og:title" content="Linux系统编程 学习(四)管道、命名管道">
+<meta property="og:url" content="https://sndgza.github.io/post/1e39d98d.html">
 <meta property="og:site_name" content="sndgza">
-<meta property="og:description" content="shell 脚本的定义与执行1、定义开头：   #!&#x2F;bin&#x2F;bash               #！用来声明当前脚本文件的shell解释器的类型，如果不写则为默认的shell2、编写代码     单个#表示注释3、执行    chmod +x xxx.sh .&#x2F;xxx.sh 修改为可执行权限后执行 检测#!，使用#！指定的bash读取解释，没有则使用默认的bash    bash test.s">
+<meta property="og:description" content="管道概述：管道又称无名管道无名管道是一种特殊的文件描述符，在应用层体现为两给打开的文件描述符无名管道就是创建在内存空间的，多个进程知道同一个无名管道的空间就可以利用它来通信管道是最古老的UNIXIPC方式，其特点是：1、半双工2、数据只能从管道的一端写入，另一端读出3、写入管道的数据遵循先入先出的规则4、管道所传输的数据是无格式的，这就要求管道的读出方盒写入方必须现约定好数据格式5、管道不是普通文">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-11-15T09:14:54.000Z">
-<meta property="article:modified_time" content="2021-11-26T06:47:31.424Z">
+<meta property="og:image" content="https://i.bmp.ovh/imgs/2021/11/2c490969525bfcf3.png">
+<meta property="article:published_time" content="2021-11-27T02:36:01.000Z">
+<meta property="article:modified_time" content="2021-11-28T05:54:04.527Z">
 <meta property="article:author" content="小应">
 <meta property="article:tag" content="Linux">
-<meta property="article:tag" content="Linux-shell">
+<meta property="article:tag" content="Linux-管道">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.bmp.ovh/imgs/2021/11/2c490969525bfcf3.png">
 
-<link rel="canonical" href="https://sndgza.github.io/post/24ad253c.html">
+<link rel="canonical" href="https://sndgza.github.io/post/1e39d98d.html">
 
 
 <script id="page-configurations">
@@ -63,7 +65,7 @@
   padding: 1px 4px;
 }
 </style>
-  <title>shell学习（1）变量 | sndgza</title>
+  <title>Linux系统编程 学习(四)管道、命名管道 | sndgza</title>
   
 
 
@@ -214,7 +216,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://sndgza.github.io/post/24ad253c.html">
+    <link itemprop="mainEntityOfPage" href="https://sndgza.github.io/post/1e39d98d.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/QQ%E5%9B%BE%E7%89%8720211106165309.jpg">
@@ -227,7 +229,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          shell学习（1）变量
+          Linux系统编程 学习(四)管道、命名管道
         </h1>
 
         <div class="post-meta">
@@ -237,14 +239,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-11-15 17:14:54" itemprop="dateCreated datePublished" datetime="2021-11-15T17:14:54+08:00">2021-11-15</time>
+              <time title="创建时间：2021-11-27 10:36:01" itemprop="dateCreated datePublished" datetime="2021-11-27T10:36:01+08:00">2021-11-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-26 14:47:31" itemprop="dateModified" datetime="2021-11-26T14:47:31+08:00">2021-11-26</time>
+                <time title="修改时间：2021-11-28 13:54:04" itemprop="dateModified" datetime="2021-11-28T13:54:04+08:00">2021-11-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,7 +259,7 @@
             </span>
 
           
-            <span id="/post/24ad253c.html" class="post-meta-item leancloud_visitors" data-flag-title="shell学习（1）变量" title="阅读次数">
+            <span id="/post/1e39d98d.html" class="post-meta-item leancloud_visitors" data-flag-title="Linux系统编程 学习(四)管道、命名管道" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -272,8 +274,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/post/24ad253c.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/post/24ad253c.html" itemprop="commentCount"></span>
+    <a title="valine" href="/post/1e39d98d.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/post/1e39d98d.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -283,14 +285,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -302,18 +304,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="shell-脚本的定义与执行"><a href="#shell-脚本的定义与执行" class="headerlink" title="shell 脚本的定义与执行"></a>shell 脚本的定义与执行</h2><p>1、定义开头：   #!/bin/bash<br>               #！用来声明当前脚本文件的shell解释器的类型，如果不写则为默认的shell<br>2、编写代码     单个#表示注释<br>3、执行<br>    chmod +x xxx.sh ./xxx.sh 修改为可执行权限后执行 检测#!，使用#！指定的bash读取解释，没有则使用默认的bash<br>    bash test.sh             直接指定使用bash解释xxx.sh<br>    . test                   使用当前shell读取接收xxx.sh<br>      <span id="more"></span><br><strong>定义变量</strong><br>变量名=变量值<br>#赋值操作时不能在=两边加空格<br>num=10<br><strong>引用变量</strong><br>$变量名<br>如：i=$num<br><strong>显示变量</strong><br>echo $num<br>echo $i<br><strong>清除变量</strong><br>unset num</p>
-<p><strong>变量的其他用法</strong><br>read string<br>    从键盘输入字符串给string<br>readonly var=100<br>    只读变量，以后不能改变不能清除<br>export var=300<br>    使用export说明的变量，会被导出为环境变量，其他shell均可使用</p>
-<h2 id="shell环境变量"><a href="#shell环境变量" class="headerlink" title="shell环境变量"></a>shell环境变量</h2><p>shell在开始执行时就已经定义了一些和系统的工作环境有关的变量，我们在shell中可以直接使用$name引用<br>定义：<br>    一般在~/.bashrc或/etc/profile文件中（系统自动调用的脚本）使用export设置，允许用户后来更改<br>        VARNAME=value;export VARNAME<br>    传统上，所有环境变量均为大写<br><strong>显示环境变量</strong><br>        使用env可以查看当前系统的所有环境变量<br><strong>清除环境变量</strong><br>        unset清除环境变量<br><strong>常见环境变量：</strong></p>
-<blockquote>
-<p>HONE：保存注册目录的完全路径名<br>PATH：保存用：分隔的路径名，shell将按PATH变量中给出的顺序搜索这些目录，找到的第一个与名称一致的可执行文件将被执行<br>HOSTNAME：主机名<br>SHELL：默认的shell命令解释器<br>LOGAME：此变量保存登陆名<br>PWD：当前工作目录的绝对路径名<br>….<br>在终端定义的环境变量只是临时的，在配置文件~/.bashrc中添加的环境变量才能保存不变（sourc ~/.bashrc）</p>
-</blockquote>
-<h2 id="预设变量"><a href="#预设变量" class="headerlink" title="预设变量"></a>预设变量</h2><blockquote>
-<p>$ ：（超过10需要加{}例如：echo”$10 = ${10}”）<br>$0：当前的进程名<br>$#：参数个数<br>$$：当前进程号<br>$*：传给shell脚本参数的内容<br>$?: 检查上一条命令执行是否正确，如果成功返回0，不成功返回非0。 </p>
-</blockquote>
-<h2 id="脚本变量的特殊用法"><a href="#脚本变量的特殊用法" class="headerlink" title="脚本变量的特殊用法"></a>脚本变量的特殊用法</h2><blockquote>
-<p>“”：包含的变量会被解释<br>‘’：包含的变量会被当做字符串解释<br>``：反引号中的内容作为系统命令，并执行其内容，可以替换输出为一个变量（等价于$()）<br>(命令序列)：由子序列完成，不影响当前shell的值<br>{命令序列}：当前shell执行，影响当前shell的值<br>-e：使用转义字符</p>
-</blockquote>
+        <h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><p>管道又称无名管道<br>无名管道是一种特殊的文件描述符，在应用层体现为两给打开的文件描述符<br>无名管道就是创建在内存空间的，多个进程知道同一个无名管道的空间就可以利用它来通信<br><img data-src="https://i.bmp.ovh/imgs/2021/11/2c490969525bfcf3.png"><br>管道是最古老的UNIXIPC方式，其特点是：<br>1、半双工<br>2、数据只能从管道的一端写入，另一端读出<br>3、写入管道的数据遵循先入先出的规则<br>4、管道所传输的数据是无格式的，这就要求管道的读出方盒写入方必须现约定好数据格式<br>5、管道不是普通文件，不属于某个文件系统<br>6、管道在内存中对应一个缓冲区。不同的系统大小不一定相同<br>7、从管道读数据是一次性操作，数据一旦被读走，它就从管道中被抛弃，释放空间，以便写更多的数据<br>8、管道没有名字，只能在具有公共祖先的进程之间使用。、</p>
+<h2 id="无名管道的创建"><a href="#无名管道的创建" class="headerlink" title="无名管道的创建"></a>无名管道的创建</h2><p>pipe函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    经由filedes返回两个文件描述符</span><br><span class="line">parameter: filedes</span><br><span class="line">    filedes为int型数组的首地址，其存放了管道的文件描述符fd[0],fd[1]。</span><br><span class="line">    filedes[0]为读而打开，filedes[1]为写而打开管道，filedes[1]的输入是filedes[0]的输出</span><br><span class="line">return：</span><br><span class="line">    成功返回 0 </span><br><span class="line">    失败返回 -1</span><br><span class="line">******************************************************************************/</span><br><span class="line">int pipe(int filedes[2]);</span><br></pre></td></tr></table></figure>
+<h2 id="从管道读数据的特点"><a href="#从管道读数据的特点" class="headerlink" title="从管道读数据的特点"></a>从管道读数据的特点</h2><p>1、默认用read函数从管道中读数据是阻塞的<br>2、调用write函数向管道里写数据，当缓冲区已满数write也会阻塞<br>3、通信过程中，读端口全部关闭后，写进程向管道内写数据时，写进程会退出</p>
+<h2 id="无名管道的读写规律"><a href="#无名管道的读写规律" class="headerlink" title="无名管道的读写规律"></a>无名管道的读写规律</h2><p>1、读写端都存在只读不写<br>  如果管道中有数据会正常读取数据，如果管道中没有数据，则读操作会阻塞，直到有数据<br>2、读写都存在，只写不读<br>  如果一直执行写操作，则无名管道对应的缓冲区会被写满，写满之后，write函数也会阻塞等待，默认无名管道的缓冲区64k字节<br>3、只有读端<br>  如果原本管道中有数据，则读操作正常执行，如果没有数据则返回0<br>4、只有写端<br>  如果关闭读端，一旦执行写操作，就会产生一个信号SIGPIPE（管道破裂），这个信号默认处理信号是退出进程。</p>
+<h2 id="通过fcntl设置文件阻塞特性"><a href="#通过fcntl设置文件阻塞特性" class="headerlink" title="通过fcntl设置文件阻塞特性"></a>通过fcntl设置文件阻塞特性</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//设置为阻塞</span><br><span class="line">fcntl(fd,F_SETFL,0);</span><br><span class="line">//设置为非阻塞,如果管道中，没有数据，则read函数立刻返回，执行接下来的代码</span><br><span class="line">fcntl(fd,F_SETFL,O_NONBLOCK);</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件描述符的复制"><a href="#文件描述符的复制" class="headerlink" title="文件描述符的复制"></a>文件描述符的复制</h2><p><strong>dup函数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    复制oldfd文件描述符，并分配一个新的文件描述符，新的文件描述符是调用进程文件描述表中最小可用的文件描述符</span><br><span class="line">parameter: oldfd</span><br><span class="line">    要复制的文件描述符</span><br><span class="line">return：</span><br><span class="line">    成功返回 新的文件描述符 </span><br><span class="line">    失败返回 -1，错误代码存于errno中</span><br><span class="line">******************************************************************************/</span><br><span class="line">int dup(int oldfd);</span><br></pre></td></tr></table></figure>
+<p><strong>dup2函数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    复制一份打开的文件描述符oldfd，并分配新的文件描述符newfd，newfd也标识oldfd所标识的文件</span><br><span class="line">parameter: oldfd,newfd</span><br><span class="line">    oldfd:要复制的文件描述符</span><br><span class="line">    newfd:分配的新的文件描述符</span><br><span class="line">return：</span><br><span class="line">    成功返回 newfd</span><br><span class="line">    失败返回 -1，错误代码存于errno中</span><br><span class="line">******************************************************************************/</span><br><span class="line">int dup2(int oldfd);</span><br></pre></td></tr></table></figure>
+<h2 id="命名管道的特点"><a href="#命名管道的特点" class="headerlink" title="命名管道的特点"></a>命名管道的特点</h2><p>1、半双工<br>2、数据遵循先进先出<br>3、FIFO所传输的数据是无格式的<br>4、FIFO在文件系统中作为一个特殊的文件而存在并且在文件系统中可见，但FIFO中的内容却存在内存中<br>5、管道在内存中对应一个缓冲区<br>6、从FIFO中读数据是一次性操作，数据一旦被读取就被抛弃，释放空间以便写更多的数据<br>7、当使用FIFO的进程退出后，FIFO的文件将继续保存在文件系统中以便以后使用<br>8、FIFO是有名字的，不相关的进程可以通过打开命名管道进行通信</p>
+<h2 id="如何创建命名管道"><a href="#如何创建命名管道" class="headerlink" title="如何创建命名管道"></a>如何创建命名管道</h2><p>1、通过mkfifo命令创建<br>2、使用mkfifo函数创建</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types&gt;</span><br><span class="line">#include &lt;sys/stat.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">/******************************************************************************</span><br><span class="line">function:</span><br><span class="line">    创建一个有名管道，产生一个本地文件系统可见的文件pathname</span><br><span class="line">parameter:</span><br><span class="line">    pathname:有名管道创建后生成的文件，可带路径名</span><br><span class="line">    mode:管道文件的权限，一般通过八进制数描述</span><br><span class="line">return：</span><br><span class="line">    成功返回 0</span><br><span class="line">    失败返回 -1，错误代码存于errno中</span><br><span class="line">******************************************************************************/</span><br><span class="line">int mkfifo(const char *pathname,mode_t mode);</span><br></pre></td></tr></table></figure>
+<p>不能使用lseek修改管道文件的偏移量，有名管道创建的文件只是起到标识作用，真正有名管道实现进程间通信还是在内核空间开辟内存，所以本地产生的文件只是一个标识，没有其他作用，对本地管道文件的操作实质是对内存空间的操作<br>由于有名管道在本地创建了一个管道文件，所以不相关的进程间也可以实现通信</p>
+<h2 id="有名管道的读写规律"><a href="#有名管道的读写规律" class="headerlink" title="有名管道的读写规律"></a>有名管道的读写规律</h2><p>1、读写端都存在，只读不写<br>若管道当中原本有数据，正常读写，当管道中没有数据时则读操作阻塞<br>2、读写端都存在，只写不读<br>如果一直执行写操作，当有名管道的数据缓冲区写满时，write函数会发生阻塞<br>3、只有读端，没有写端<br>在一个进程中只有读端没有写端，在open函数的位置阻塞<br>4、只有写端，没有读端<br>在一个进程中只有写端没有读端，在open函数的位置阻塞<br>5、一个进程负责只读，一个进程负责只写<br>只要保证有名管道的读写端都存在，不管是几个进程都不会再open阻塞了<br>如果一个进程只读一个进程只写，都运行后，如果关闭写段，read会返回0<br>如果一个进程只读一个进程只写，都运行后，如果关闭读段，写端会立即产生SIGPIPE信号，默认的处理方式是退出进程</p>
 
     </div>
 
@@ -355,7 +361,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://sndgza.github.io/post/24ad253c.html" title="shell学习（1）变量">https://sndgza.github.io/post/24ad253c.html</a>
+    <a href="https://sndgza.github.io/post/1e39d98d.html" title="Linux系统编程 学习(四)管道、命名管道">https://sndgza.github.io/post/1e39d98d.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -367,7 +373,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/Linux-shell/" rel="tag"># Linux-shell</a>
+              <a href="/tags/Linux-%E7%AE%A1%E9%81%93/" rel="tag"># Linux-管道</a>
           </div>
 
         
@@ -376,13 +382,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/post/cc8cc824.html" rel="prev" title="Moderate Modular Mode">
-      <i class="fa fa-chevron-left"></i> Moderate Modular Mode
+    <a href="/post/76d9feda.html" rel="prev" title="Linux系统编程学习(三)信号">
+      <i class="fa fa-chevron-left"></i> Linux系统编程学习(三)信号
     </a></div>
-      <div class="post-nav-item">
-    <a href="/post/e709f898.html" rel="next" title="shell学习（2）条件测试语句">
-      shell学习（2）条件测试语句 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -442,7 +445,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell-%E8%84%9A%E6%9C%AC%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%89%A7%E8%A1%8C"><span class="nav-text">shell 脚本的定义与执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">shell环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E8%AE%BE%E5%8F%98%E9%87%8F"><span class="nav-text">预设变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E5%8F%98%E9%87%8F%E7%9A%84%E7%89%B9%E6%AE%8A%E7%94%A8%E6%B3%95"><span class="nav-text">脚本变量的特殊用法</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%A1%E9%81%93"><span class="nav-text">管道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0%EF%BC%9A"><span class="nav-text">概述：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-text">无名管道的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E7%AE%A1%E9%81%93%E8%AF%BB%E6%95%B0%E6%8D%AE%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-text">从管道读数据的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E8%AF%BB%E5%86%99%E8%A7%84%E5%BE%8B"><span class="nav-text">无名管道的读写规律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87fcntl%E8%AE%BE%E7%BD%AE%E6%96%87%E4%BB%B6%E9%98%BB%E5%A1%9E%E7%89%B9%E6%80%A7"><span class="nav-text">通过fcntl设置文件阻塞特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E5%A4%8D%E5%88%B6"><span class="nav-text">文件描述符的复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-text">命名管道的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="nav-text">如何创建命名管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E5%90%8D%E7%AE%A1%E9%81%93%E7%9A%84%E8%AF%BB%E5%86%99%E8%A7%84%E5%BE%8B"><span class="nav-text">有名管道的读写规律</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
